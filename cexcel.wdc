@@ -1,0 +1,2225 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CExcel
+ major_version : 28
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x3adbf68d2169fc84
+ internal_properties : CAAAAAgAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : CAAAAAgAAAB866eP4Ets4TTLMsshqEz3fUrTsqRNJyKDnG3Fh2I4G2j/gv1+ctrBQKEsIohDsPZ15m8aTDv/o82gJIt8op0fGoBvBA==
+  type_code : 10
+  p_codes :
+   -
+     internal_properties : CAAAAAgAAABxwckXqC/EHHG28zVPC1z+hHfKo6cNQWrpzsC5STcIDIHLQ/FwQQHUYlxqAgXrATf7rKx9avV2E52UiLD/UPzgAowqlj3cSUJr1LKXT9FUysj1gCBz8c6NPywkSN07Gnpy/KlmBV9SD8c644/YLXfhNlSyLjFw9VEMsUNKIM8Ik+jKYJB5IUMgFflkGIHuHt0=
+     code : |1-
+      CExcel is Class
+      	inhérits of CSpreadsheet
+      	
+      	m_xExcel 				is object OLE dynamic	// Pointer to active object
+      	m_nVersion 				is int  				// Version of Excel installed on the computer
+      	m_sCurrentFolder 		is string				// Name of the current workbook
+      	m_sArrSelectedWorksheets is array of 0 strings
+      	
+      	CONSTANT
+      		//Excel format: xls 
+      		cnFormatXls = -4143
+      		//Excel format: xlsX 
+      		cnFormatXlsx = 51
+      		
+      		
+      	END
+      END
+     type : 131072
+   -
+     code : |1-
+      
+     type : 131074
+  procedures :
+   -
+     name : Constructor
+     procedure_id : 4241254560529448078
+     type_code : 27
+     code : |1+
+      Procedure Constructor()
+      
+      // Name of the spreadsheet
+      :m_sSpreadsheetName = CChooseSpreadsheet::csProduct_Excel
+     type : 589824
+   -
+     name : Destructor
+     procedure_id : 4241254559840140430
+     type_code : 28
+     code : |1+
+      Procedure Destructor()
+      
+      IF :m_xExcel<>Null THEN
+      	:Exit()
+      	Multitask(-10)
+      	
+      	// free the pointer
+      	delete :m_xExcel
+      END
+     type : 655360
+   -
+     name : Worksheet_DrawLine
+     internal_properties : CAAAAAgAAACYwMTzjKLd1PwQY0mBKmi8+3NYGLJ+R6DinzW6FnTmRMAUiMxClewF1C4NLtskW81REnF3kcbylhdQ0mFUw5y76nFXS6lsPkus/36pfP297m7HoqN5rbQgrGbls9JOSUEapTgHXmQT8BA0rfGV20PX1aN7c1NtYCXAVFrQtziXO+ooP1OXDzjj6KqIDO16quwue8NoeAGC1mDIPhKanU0rRgg4ZywmAOQatulngw==
+     procedure_id : 4241254560110935202
+     type_code : 12
+     code : |1-
+      // Summary: Draws an object in the worksheet specified in parameter
+      // Syntax:
+      //[ <Result> = ] Worksheet_DrawLine (<X1>, <Y1>, <X2>, <Y2> [, <nThickness> [, <nColor> [, <sWorksheetName>]]])
+      //
+      // Parameters:
+      //	X1: X-coordinate of the 1st point
+      //	Y1: Y-coordinate of the 1st point
+      //	X2: X-coordinate of the 2nd point
+      //	Y2: Y-coordinate of the 2nd point
+      //	nThickness (default value=1): Thickness of the line
+      //	nColor (default value=0): Color of the line
+      //	sWorksheetName: Worksheet where the drawing will be performed (current worksheet by default)
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_DrawLine(X1, Y1, X2, Y2, nThickness= 1 , nColor = 0, sLeafName=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sLeafName<>“” THEN
+      	// Select the requested worksheet
+      	:Worksheet_Select(sLeafName)
+      	//otherwise, use the current worksheet
+      END
+      
+      //Draws the line
+      pautRow is object OLE dynamic
+      pautRow = :m_xExcel>>ActiveSheet>>Shapes>>AddLine(X1, Y1, X2, Y2)
+      
+      //Changes the thickness, the color and the visibility
+      pautRow>>Line>>Weight(nThickness)
+      pautRow>>Line>>ForeColor>>RGB = nColor
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_HorizontalAlignment
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254572736710861
+     type_code : 12
+     code : |1+
+      // Summary: Specifies the horizontal alignment of the selected cells
+      // Syntax:
+      //[ <Result> = ] Cell_HorizontalAlignment ([<sRange> [, <nAlignment>]])
+      //
+      // Parameters:
+      //	sRange: selected cells
+      //	nAlignment (default value=1:Left): 1->Left, 2->Center, 3->Right
+      // Return value:
+      // 	boolean: True if the process is successful
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_HorizontalAlignment(sRange=“”,nAlignment =::cnAlignH_Left)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // select the requested range
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      nAlignConstant is int 
+      
+      // If the alignment is correct
+      IF nAlignment IN (::cnAlignH_Left,::cnAlignH_Center,::cnAlignH_Right) THEN
+      	// Specifies the horizontal alignment of the cells found in the selected range
+      	SWITCH nAlignment
+      		CASE 1 : //"LEFT"
+      			nAlignConstant = -4131 //xlLeft
+      		CASE 2 : //"CENTRAL"
+      			nAlignConstant = -4108 //xlCenter
+      		CASE 3 : // "RIGHT"
+      			nAlignConstant = -4152 //xlRight
+      		OTHER CASE 
+      			nAlignConstant = -4131 //xlLeft
+      	END		
+      	// perform the requested alignment	
+      	:m_xExcel>>Selection>>HorizontalAlignment = nAlignConstant	
+      	RESULT True
+      END
+      
+      // The alignment cannot be performed
+      RESULT False
+     type : 458752
+   -
+     name : Cell_Paste
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254572618549523
+     type_code : 12
+     code : |1-
+      // Summary: Paste the content in a given cell
+      // Syntax:
+      //[ <Result> = ] Cell_Paste ([<sCell>])
+      //
+      // Parameters:
+      //	sCell: Cell where the content will be pasted
+      // Return value:
+      // 	boolean: True if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Paste(sCell=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sCell<>“” THEN
+      	
+      	// select the cell	
+      	:Cell_Select(sCell)
+      	
+      	// check the selection
+      	:m_xExcel>>Selection
+      	
+      	// paste in zone
+      	:m_xExcel>>ActiveSheet>>Paste()
+      	
+      	RESULT True
+      	
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Cell_Copy
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254573159549323
+     type_code : 12
+     code : |1-
+      // Summary: Copies the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Copy ([<sCell>])
+      //
+      // Parameters:
+      //	sCell:  Cell to copy
+      // Return value:
+      // 	boolean: // 	None
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Copy(sCell=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sCell<>“” THEN
+      	
+      	// Select the cell
+      	:Cell_Select(sCell)
+      	
+      	// check the selection
+      	:m_xExcel>>Selection
+      	
+      	// copy the area
+      	:m_xExcel>>Selection>>Copy()
+      	
+      	RESULT True 
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Cell_Cut
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254574345685467
+     type_code : 12
+     code : |1-
+      // Summary: Cuts the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Cut ([<sCell>])
+      //
+      // Parameters:
+      //	sCell: Cell to cut
+      // Return value:
+      // 	boolean: True if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Cut(sCell=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sCell<>“” THEN
+      	
+      	// select the cell
+      	:Cell_Select(sCell)
+      	
+      	// cut
+      	:m_xExcel>>Selection>>Cut()
+      	
+      	RESULT True 	
+      	
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Cell_Write
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254572494359063
+     type_code : 12
+     code : |1-
+      // Summary: // Write the specified content into the specified cell
+      // Syntax:
+      //[ <Result> = ] Cell_Write (<sCell>, <sValue>)
+      //
+      // Parameters:
+      //	sCell: Cell where the write operation will be performed
+      //	sValue: Value to write (numeric, string or formula)
+      // Return value:
+      // 	boolean: True if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Write(sCell, sValue)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Is it a formula?
+      IF Left(sValue,1)=“=” THEN
+      	// Write the specified formula into the specified cell
+      	// Write a value into the cell passed in parameter
+      	:m_xExcel>>Range(sCell)>>Formula = sValue +“ ”
+      	:m_xExcel>>Calculate()
+      ELSE
+      	// Write a value into the cell passed in parameter
+      	:m_xExcel>>Range(sCell)>>Value = sValue
+      END
+      
+      RESULT True 
+     type : 458752
+   -
+     name : Save
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254574033340971
+     type_code : 12
+     code : |1-
+      // Summary:  Saves the current workbook
+      // Syntax:
+      //[ <Result> = ] Save ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: // 	None
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Save()
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // if there is no current document
+      IF :m_sCurrentFolder~=“” THEN
+      	
+      	:SaveAs()
+      	
+      ELSE
+      	
+      	// save the document
+      	:m_xExcel>>ActiveWorkbook>>Save()
+      	
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : SaveAs
+     internal_properties : CAAAAAgAAACa4qP6D4yLFwivmPi+MUi8qBGHZ8XXJvSkK2eUnWtpW0ne/AUIOh3CMA+R1YFyHiIhtgx1PP8H2Jy5IGit4p0v5BidBXwzgoji0OT8pCvdXFa+ZFFYH1o9apz2xh1N2Qd+7dt0y4wc9FLK/EQsG1MoP5ppPGq7UwFevhM5xpAfVhaP3dz0QZeJyBsqYuAurs7HcttTSZevTdHbaG+ECDBBaip2IqpD/Mu/PmOL0ddxl97IoTpgRHxl5jIc4S/SZGFHpAx8VrEWk0Xv
+     procedure_id : 4241254572588141209
+     type_code : 12
+     code : |1+
+      // Summary: Opens a file picker and saves
+      // Syntax:
+      //[ <Result> = ] SaveAs ([<sWorkbookName>])
+      //
+      // Parameters:
+      //	sWorkbookName (default value=""): <specify the role of psFullPath>
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL SaveAs(sFolderName=“”)
+      
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      IF sFolderName ~= “”
+      	IF :m_nVersion <12 THEN
+      		
+      		// Select or create an Excel file
+      		sFolderName=fSelect(“”,“”,“Save as...”,“Excel document (*.XLS)”+TAB+“*.XLS”,“.XLS”,fselCreate+fselExist)
+      		
+      	ELSE
+      		//For Office 2007, propose the new extension XLSX
+      		// Select or create an Excel file
+      		sFolderName=fSelect(“”,“”,“Save as...”,“Excel document (*.XLS)”+TAB+“*.XLS” + CR + “Excel document (*.XLSX)”+TAB+“*.XLSX”,“.XLS”,fselCreate+fselExist)
+      		
+      	END
+      	
+      	// No selected file
+      	IF sFolderName=“” THEN 
+      		
+      		RESULT False 
+      	END
+      	
+      END
+      
+      
+      //Retrieve the record format
+      nFormat is int 
+      SWITCH Upper(fExtractPath(sFolderName,fExtension))
+      	CASE “.XLSX” :
+      		nFormat = ::cnFormatXlsx
+      	CASE “.XLS” :
+      		nFormat = ::cnFormatXls	
+      END
+      
+      :m_xExcel>>ActiveWorkbook>>SaveAs(sFolderName,nFormat)
+      :m_sCurrentFolder=sFolderName
+      
+      RESULT True
+     type : 458752
+   -
+     name : CloseWorkbook
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254573124225739
+     type_code : 12
+     code : |1-
+      // Summary: Closes the active document
+      // Syntax:
+      //[ <Result> =  ] CloseSpreadSheet ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL CloseWorkbook()
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // close the active workbook
+      :m_xExcel>>ActiveWorkbook>>Ferme(False)
+      
+      // there is no current workbook anymore
+      :m_sCurrentFolder=“”
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Format
+     internal_properties : CAAAAAgAAACfruDDX21HjnbaBauJlNfIF/ozE9JYIvfWr9gbELmkeU+9DMEGnbG+JHdxeIA0nKMWpMS5lUVL9pkRTcRJ1lX/pN65XD75Fbt4Jpe75mVnaqVkA10DAb4EHzCAhqVyyyEH6pbQElvVaAWA2mZAB7mLnjTJHMXelo/ZFC/lbKKLDVXzt/p1YkTBM08ozlAUTlYp/luJivyopOcS2bixqXiL
+     procedure_id : 4241254577578380009
+     type_code : 12
+     code : |1-
+      // Summary: Used to modify the format of a cell
+      // Syntax:
+      //[ <Result> = ] Cell_Format (<sCellFormat> [, <sRange>])
+      //
+      // Parameters:
+      //	sCellFormat: NUMBER, DATE, TIME, CURRENCY, PERCENTAGE, FRACTION, SCIENTIFIC, TEXT
+      //	sRange: range of cells to select
+      // Return value:
+      // 	boolean:    True if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Format(sCellFormat, sRange=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	
+      	:Cell_Select(sRange)
+      	
+      	// check the selection
+      	:m_xExcel>>Selection
+      	
+      	sFormat is string
+      	SWITCH Upper(sCellFormat)
+      		CASE “NUMBER”
+      			sFormat = “0,00”
+      		CASE “DATE”
+      			sFormat = “d mmmm yyyy”
+      		CASE “TIME”
+      			sFormat = “h:mm:ss”
+      		CASE “CURRENCY”
+      			sFormat = “#,##00 €”
+      		CASE “PERCENTAGE”
+      			sFormat = “0,00%”
+      		CASE “FRACTION”
+      			sFormat = “# ?/?”
+      		CASE “SCIENTIFIC”
+      			sFormat = “0.00E+00”
+      		CASE “TEXT”
+      			sFormat =“@”
+      		OTHER CASE 
+      			sFormat = “@”
+      	END
+      	
+      	// Change into the requested format
+      	:m_xExcel>>Selection>>NumberFormat = sFormat
+      	
+      	RESULT True 
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Cell_Merge
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254578143497018
+     type_code : 12
+     code : |1+
+      // Summary: Merges the cells
+      // Syntax:
+      //[ <Result> = ] Cell_Merge ( [<sRange>])
+      //
+      // Parameters:
+      //	sRange: Range of cells to merge
+      // Return value:
+      // 	boolean: true if the process is successful 
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Merge(sRange=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sRange<>“” THEN
+      	// select the range of cells
+      	:Cell_Select(sRange)
+      	// check the selection
+      	:m_xExcel>>Selection
+      	// Merges the selected cells horizontally or vertically
+      	:m_xExcel>>Selection>>Merge()
+      	
+      	RESULT True 
+      	
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Row_Height
+     internal_properties : CAAAAAgAAACdkDoQfcMVtqC4p+X7ghcSh8oPn8C2eBPwERINKo/UgxshbDHM0/duqqUXKrryCDFm7LAFIyN53pd7M5ofuNGFgAKFSEjjr+PyHC0tGIv3fDrhjooQeKlvfB0DOxgfkH6E34H954YYM9qtfasHUK6Q/5WoPUZhDWqu+YJan1+8/n4kZgNOsZ/wJLAf56vpH2cS16I6q+unq3i7CMEDq3qJ
+     procedure_id : 4241254578563517452
+     type_code : 12
+     code : |1-
+      // Summary: Changes the height of the row
+      // Syntax:
+      //[ <Result> = ] Row_Height ( [<nRow> [, <nSize>]])
+      //
+      // Parameters:
+      //	nRow: row to select (optional)
+      //	nSize (default value=-1): Requested height or -1 to adjust the height of the row according to the content
+      // Return value:
+      // 	boolean:  True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Height(nRow=“”, nSize = -1)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF nRow<>“” THEN
+      	:Cell_Select(nRow)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      IF nSize = -1 THEN
+      	// adjust the height of the row according to its content
+      	:m_xExcel>>Selection>>Rows>>AutoFit()
+      ELSE	
+      	// resize the row passed in parameter
+      	:m_xExcel>>Selection>>RowHeight = nSize
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Print
+     internal_properties : CAAAAAgAAAAlBA7p+bPkAlAEB9n3xmuKUz6bQ4zC9JdY9XppdgPwqxfVaKXIn7sqYun/DlaOLFmCeBwpJ7f9kodXg94DdB3VDLbZTGyPmx+KMHWRRLcDHOgXuOjGttN9WjstIT65wtg6FUuj/Xx6iThLJ9HtotBiNUPCK2QHv7Dsr8xgHYmeIERiMMl0XxkOYnbhNXH7UVko7USYefmRiXa84xLLjxIh
+     procedure_id : 4241254578227973162
+     type_code : 12
+     code : |1+
+      // Summary: Prints the active document
+      // Syntax:
+      //[ <Result> = ] Print ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Print()
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Call the print feature of Excel
+      :m_xExcel>>ActiveWindow>>SelectedSheets>>PrintOut(1)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Insert
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254578571643966
+     type_code : 12
+     code : |1-
+      // Summary: Insert a column
+      // Syntax:
+      //[ <Result> = ] Column_Insert ([<sColumn>])
+      //
+      // Parameters:
+      //	sColumn: column to select before the insertion (optional)
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Insert(sColumn=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sColumn<>“” THEN
+      	// Select the column
+      	:Cell_Select(sColumn)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // Insert the column
+      :m_xExcel>>Selection>>Insert(-4161) // xlToRight
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Insert
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254577158491228
+     type_code : 12
+     code : |1+
+      // Summary: Inserts a row 
+      // Syntax:
+      //[ <Result> = ] Row_Insert ([<sRow>])
+      //
+      // Parameters:
+      //	sRow: row to select before the insertion (optional)
+      // Return value:
+      // 	boolean: True if the process is successful 
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Insert(sRow=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sRow<>“” THEN
+      	// select the row
+      	:Cell_Select(sRow)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // insert the line
+      :m_xExcel>>Selection>>Insert(-4121) // xlDown
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Width
+     internal_properties : CAAAAAgAAACdkDoQfcMVtqC4p+X7ghcSh8oPn8C2eBPwERINKo/UgxshbDHM0/duqqUXKrryCDFm7LAFIyN53pd7M5ofuNGFgAKFSEjjr+PyHC0tGIv3fDrhjooQeKlvfB0DOxgfkH6E34H954YYM9qtfasHUK6Q/5WoPUZhDWqu+YJan1+8/n4kZgNOsZ/wJLAf56vpH2cS16I6q+unq3i7CMEDq3qJ
+     procedure_id : 4241254577988373666
+     type_code : 12
+     code : |1-
+      // Summary: Changes the width of the column
+      // Syntax:
+      //[ <Result> = ] Column_Width ([<sColumn> [, <nWidth>]])
+      //
+      // Parameters:
+      //	sColumn: column to select (optional), whose width must be modified
+      //	nWidth (default value=-1): requested width or -1 to adjust the width of the column according to its content
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Width(sColumn=“” , nWidth=-1)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sColumn<>“” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      IF nWidth = -1 THEN
+      	// adjust the width of the column according to its content
+      	:m_xExcel>>Selection>>Columns>>AutoFit()
+      ELSE	
+      	// resize the column
+      	:m_xExcel>>Selection>>ColumnWidth = nWidth
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Mask
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254578051484864
+     type_code : 12
+     code : |1-
+      // Summary: masks or unmasks a column
+      // Syntax:
+      //[ <Result> = ] Column_Mask ([<sColumn> [, <bStatus>]])
+      //
+      // Parameters:
+      //	sColumn: column to mask (optional)
+      //	bStatus (default value=1): requested status: 1 to mask
+      // Return value:
+      // 	boolean: True if the process is successful 
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Mask(sColumn=“”, bStatus=True)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sColumn<>“” THEN
+      	// select the requested column
+      	:Cell_Select(sColumn)
+      END
+      
+      // check the selection
+      
+      :m_xExcel>>Selection
+      
+      // change its status
+      IF bStatus THEN
+      	:m_xExcel>>Selection>>EntireColumn>>Hidden = True
+      ELSE
+      	:m_xExcel>>Selection>>EntireColumn>>Hidden = False
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Hide
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254577624976626
+     type_code : 12
+     code : |1-
+      // Summary: Masks or unmasks a row
+      // Syntax:
+      //[ <Result> = ] Row_Mask ([<sRow> [, <bStatus>]])
+      //
+      // Parameters:
+      //	sRow: Row to mask (optional)
+      //	bStatus (default value=1): requested status (1 = True to mask)
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Hide(sRow=“”, bStatus=True)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sRow<>“” THEN
+      	// select the requested column
+      	:Cell_Select(sRow)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // change its status
+      IF bStatus THEN
+      	:m_xExcel>>Selection>>EntireRow>>Hidden = True
+      ELSE
+      	:m_xExcel>>Selection>>EntireRow>>Hidden = False
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : nColorConst
+     procedure_id : 4241254576981019930
+     type_code : 12
+     code : |1+
+      // Summary: Returns the constant corresponding to the color passed in parameter
+      // Syntax:
+      // [ <Result> = ] nColorConst (<sColor>)
+      //
+      // Parameters:
+      // 	sColor: Color in letters
+      // Return value:
+      // 	integer: Constant corresponding to the color passed in parameter
+      
+      Procedure nColorConst(sColor)
+      
+      nColor is int
+      
+      SWITCH sColor
+      	CASE “NONE” // in case of a background color
+      		nColor = 0
+      	CASE “BLACK”
+      		nColor = 1
+      	CASE “RED”
+      		nColor = 3
+      	CASE “GREEN”
+      		nColor = 4	
+      	CASE “BLUE”
+      		nColor = 5
+      	CASE “YELLOW”
+      		nColor = 6
+      	OTHER CASE 
+      		nColor = sColor
+      END
+      RESULT nColor
+      
+     type : 458752
+   -
+     name : Create
+     internal_properties : CAAAAAgAAACjgnRnjCmwlhainYu5DCfQL4rDe6IIauf+HxgDONkcSb9VVCFOJSGmNH9JuBAM3Pue9GSRtYXjRkGhXSyRZg1fJHaBrHbhpSMYHj87Zi13chnA1zHPFTKAo4xsspGeH5V7Vgoknj9Z9JnsprIMc/0fMjDdQHHC6kut4AshWE5fcfmf+/5RtpjtN5t0uvxAghptqo/NJhCsUIuLZJRVFZSn
+     procedure_id : 4241254578629512534
+     type_code : 12
+     code : |1-
+      // Summary: Creates a new document
+      // Syntax:
+      //[ <Result> = ] Create ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Create()
+      
+      //Starts Excel
+      :_StartOrUseInstance()
+      
+      //Add a workbook
+      :m_xExcel>>Workbooks>>Add()
+      
+      // No current workbook
+      :m_sCurrentFolder=“”
+      
+      RESULT True
+     type : 458752
+   -
+     name : nGraphType
+     procedure_id : 4241254578735877482
+     type_code : 12
+     code : |1+
+      Procedure nGraphType(sType)
+      // returns the constant corresponding to the requested type of chart
+      
+      nGraphConst is int
+      
+      SWITCH sType
+      	CASE “COLUMN”
+      		nGraphConst = 51 // xlColumnClustered		
+      	CASE “LINE”
+      		nGraphConst = 65 // xlLineMarkers
+      	CASE “PIE”
+      		nGraphConst = 5 // xlPie
+      END
+      
+      RESULT nGraphConst
+      
+     type : 458752
+   -
+     name : nOfficeVersion
+     internal_properties : CAAAAAgAAAAeh93OhcvyAMv7tynQX9eeQqXqs7qPZLx5QXGqTKRsbWw+gB5k4t/TeQW67PGWRN3mV45V4DG28df4LDWN+YoJaDz+ArsZku+yYZd95Pp2WH3gji365om0yiokmsfAH+BI3ugOIS6yEoR8DnoeyZ2GnX4VszCTKsODyUZ+tgnNImr6UFHKwEkLYLkPe/vrhlm32XwxPVzgFKF4eWwv36uawViKFITxsrmsZA==
+     procedure_id : 4241254577499999634
+     type_code : 12
+     code : |1+
+      // Summary: Checks the presence of an Office software (Word, Excel) and finds its latest version
+      // Syntax:
+      //[ <Result> = ] nOfficeVersion (<sProgram>)
+      //
+      // Parameters:
+      //	sProgram: Program sought
+      // Return value:
+      // 	integer: returns 0 if the software is not found or the version number if the software is found
+      // Automatic process of errors: RESULT 0
+      //
+      
+      Procedure nOfficeVersion(sProgram)
+      
+      sKey, sSubKey are strings
+      nVersion is int = 0
+      
+      // check whether Office is installed
+      sKey = RegistryFirstSubKey(“HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\”)
+      
+      // if Office is not installed on the computer, then Word cannot be found either
+      IF sKey~=“” THEN RESULT 0
+      
+      // if Office is installed on the computer, check the presence of the program
+      WHILE sKey<>“”
+      	// First sub-key of the program
+      	sSubKey = RegistryFirstSubKey(sKey+“\”+sProgram+“\”)
+      	// if the program is found, retrieve its version
+      	IF sSubKey<>“” THEN
+      		// keep the most recent version only
+      		nVersion = Max(Val(ExtractString(sKey,1,“\”,FromEnd)),nVersion)		
+      	END
+      	// Next key
+      	sKey = RegistryNextKey(sKey)
+      END
+      
+      RESULT nVersion
+     type : 458752
+   -
+     name : OpenWorkbook
+     internal_properties : CAAAAAgAAADiLkpAjOG963Jb1ErDnox3b+EWwImFF22PI/+Je/xFmgcEcvUiW3ecvsfDTCq7qDL+AeMe+7rDI1lP23l8FYCMfO+z2WYFAcs9794lbhQNZi0UWiAmQ0WP5rc5zWJ1whr+4a83qQyqXdbRzXtfMIa05WP4pT5xHRRalaxg5zd0JErook8y7dNAVrlyjBVXgQl4zZj0PaXffQj4e5nbR03NVX9adtZhPgpum3wXYkPrbA==
+     procedure_id : 4241254578823106039
+     type_code : 12
+     code : |1-
+      // Summary: Opens a workbook
+      // Syntax:
+      //[ <Result> = ] OpenWorkbook ([<sWorkbook>])
+      //
+      // Parameters:
+      //	sWorkbook (default value=""): workbook to open (optional)
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL OpenWorkbook(sWorkSheet=“”) <redéfinition>
+      
+      // Choose the workbook to open
+      sWorkSheet = fSelect(“”, “”, “Select a workbook...”, “Microsoft Excel (*.xls)”+TAB+“*.xls”+CR+“Microsoft Excel 2007 (*.xlsx)”+TAB+“*.xlsx”+CR+“Microsoft Excel Model (*.xlt)”+TAB+“*.xlt”+CR+“All files (*.*)”+TAB+“*.*”, “*.xls”, fselOpen+fselExist)
+      
+      //Starts Excel
+      :_StartOrUseInstance()
+      
+      // Does the file exist?
+      IF fFileExist(sWorkSheet) = False THEN
+      	RESULT False	
+      END
+      
+      
+      // open the requested workbook
+      :m_xExcel>>Workbooks>>Open(sWorkSheet)
+      
+      // this document becomes the current document
+      :m_sCurrentFolder = sWorkSheet
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Font
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254577010839091
+     type_code : 12
+     code : |1+
+      // Summary: Modifies the font
+      // Syntax:
+      //[ <Result> = ] Cell_Font ([<sRange> [, <sFont> [, <nSize> [, <bBold> [, <bItalic> [, <bUnderlined> [, <sTextColor> [, <sBackgroundColor>]]]]]]]])
+      //
+      // Parameters:
+      //	sRange: range of cells to select (optional)
+      //	sFont: requested font (optional)
+      //	nSize (default value=0): requested size for the font (optional)
+      //	bBold: bold of the font
+      //	bItalic: italic of the font
+      //	bUnderlined: underlined
+      //	sTextColor: color of the text in the cell (optional)
+      //	sBackgroundColor: background color of the cell (optional)
+      // Return value:
+      // 	boolean:  True if the process is successful 
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Font(sRange=“”, sFont=“”, nSize=0 ,bBold=“”, bItalic=“”, bUnderline=“”, sTextColor=“”, sBgrColor=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      IF sRange<>“” THEN
+      	
+      	// select the requested range of cells
+      	:Cell_Select(sRange)
+      	
+      	// check the selection
+      	:m_xExcel>>Selection
+      	
+      	// Requested font
+      	IF sFont<>“” THEN
+      		:m_xExcel>>Selection>>Font>>Name = sFont
+      	END
+      	
+      	// Size of the requested font
+      	IF nSize>0 THEN
+      		:m_xExcel>>Selection>>Font>>Size = nSize
+      	END
+      	// weight
+      	:Cell_Weight(bBold, bItalic, bUnderline)
+      	
+      	// color
+      	IF sTextColor<>“” THEN
+      		:Cell_Color(sRange, sTextColor, “”)
+      	END
+      	
+      	// background color
+      	IF sBgrColor<>“” THEN
+      		:Cell_Color(sRange, “”, sBgrColor)
+      	END
+      	
+      	RESULT True 
+      	
+      END
+      
+      RESULT False
+      
+     type : 458752
+   -
+     name : Exit
+     internal_properties : CAAAAAgAAAA7uBrZ4v4HRQfsfHdRoGfJXN8oqudGfhTevI7MDFnygZk1EjedOlabOBDhA6dfgfoRSlykmzkJ/NfoqtWSZQhR5K++VkgNLYiUySfOIPfqoeJOnHiwCw405LDj1mxlnV1ahpd7OyFd8iLseUL9vCEbJeKQ0fzsVPP2BlDPTaPB/wrtLl9sNNp3CMHt9N9v+IRq/jjQL5aWuEzeg5QyKkA=
+     procedure_id : 4241254577007431299
+     type_code : 12
+     code : |1-
+      // Summary: Exist Excel
+      // Syntax:
+      //[ <Result> = ] Exit ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure Exit()
+      
+      :m_xExcel>>Quit()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Rename
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254578434739863
+     type_code : 12
+     code : |1+
+      // Summary: Renames the specified worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Rename (<sFormerName>, <sNewName>)
+      //
+      // Parameters:
+      //	sFormerName: Former name of the worksheet (optional -> current worksheet)
+      //	sNewName: New name of the worksheet
+      // Return value:
+      // 	boolean: True if the process is successful
+      //
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Rename(sFormerName, sNewName)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // empty names are not allowed for worksheets
+      IF sFormerName=“” _OR_ sNewName=“” THEN
+      	RESULT False
+      END
+      
+      // if the worksheet to modify is found
+      // and if the new name is not already used
+      IF :Worksheet_Exist(sFormerName)=True _AND_ :Worksheet_Exist(sNewName)=False THEN
+      	// Renames the calculation sheet <sOldName> to <sNewName>
+      	:m_xExcel>>Sheets(sFormerName)>>Name=sNewName
+      	RESULT True
+      ELSE
+      	RESULT False
+      END
+     type : 458752
+   -
+     name : Cell_Select
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254577031024319
+     type_code : 12
+     code : |1+
+      // Summary: Selects a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Select (<sCells>)
+      //
+      // Parameters:
+      //	sCells: range of cells to select
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Select(sCells)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // sCells is the r
+      // ex: A1 for a single cell
+      // ex: A1:B2  for a range of cells
+      // e.g. A for a column
+      // ex: A:C for a range of columns
+      // e.g. 2 for a line
+      // ex: 2:5 for a range of rows
+      
+      sCell, sLine1, sLine2, sColumn1, sColumn2, sCh are strings
+      i is int
+      nBound		is int
+      
+      sRange  is string = sCells
+      
+      // if A1 is received, it is changed into A1:A1
+      IF Position(sRange,“:”)=0 THEN
+      	sRange = sRange+“:”+sRange
+      END
+      
+      // first cell
+      sCell = ExtractString(sRange,1,“:”)
+      nBound = Length(sCell)
+      FOR i=1 TO nBound
+      	sCh = sCell[[i]] 
+      	IF NumToString(Val(sCh))~=sCh THEN
+      		sLine1 += sCh
+      	ELSE
+      		sColumn1 += sCh
+      	END
+      END
+      
+      // second cell
+      sCell = ExtractString(sRange,2,“:”)
+      nBound = Length(sCell)
+      FOR i=1 TO nBound
+      	sCh = sCell[[i]] 
+      	IF NumToString(Val(sCh))~=sCh THEN
+      		sLine2 += sCh
+      	ELSE         
+      		sColumn2 += sCh
+      	END
+      END
+      
+      // Select the range
+      
+      // if it's a range of rows
+      IF (sColumn1~=“” AND sColumn2~=“”) THEN
+      	:m_xExcel>>Rows(sLine1+“:”+sLine2)>>Select()
+      	RESULT True
+      END
+      
+      // if it's a range of columns
+      IF (sLine1~=“” AND sLine2~=“”) THEN
+      	:m_xExcel>>Columns(sColumn1+“:”+sColumn2)>>Select()
+      	RESULT True
+      END
+      
+      // if it's a range of cells
+      IF (sLine1<>“” AND sLine2<>“” AND sColumn1<>“” AND sColumn2<>“”) THEN
+      	:m_xExcel>>Range(sColumn1+sLine1+“:”+sColumn2+sLine2)>>Select()
+      	RESULT True
+      ELSE
+      	RESULT False
+      END
+      
+     type : 458752
+   -
+     name : Worksheet_SelectBySubscript
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254582357987257
+     type_code : 12
+     code : |1+
+      // Summary: Selects a worksheet by its subscript
+      // Syntax:
+      //[ <Result> = ] Worksheet_SelectBySubscript (<nSubscript)
+      //
+      // Parameters:
+      //	nSubscript: Subscript of the worksheet to select
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_SelectBySubscript(nSubscript)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      sLeafName is string 
+      
+      IF nSubscript<1 OR nSubscript > :Worksheet_Occurrence() THEN
+      	RESULT False
+      END
+      
+      //select the requested worksheet
+      :m_xExcel>>Sheets>>Item(nSubscript)>>Select()
+      
+      sLeafName = :Worksheet_Name()
+      ArrayDeleteAll(:m_sArrSelectedWorksheets)
+      ArrayAdd(:m_sArrSelectedWorksheets,sLeafName)
+      
+      RESULT True 
+     type : 458752
+   -
+     name : Cell_Read
+     internal_properties : CAAAAAgAAADaEDjzaajyI90intMm+IESOkze5z9rWXPL+aeOJ0zNL+yG22eo8XnLpf327vazMfzo23SXIYWU9vwj6aC1AkbX0qEN6R17M95+Ua8ZOkrs5/wGw4jOnNgMd5dH9fJ9Cu+pj1qJf+i9ed1U4VHLbaR6gUdk4HN0GXU0ajnyodMAY+p/Ijfgl8IY8g==
+     procedure_id : 4241254582095974349
+     type_code : 12
+     code : |1+
+      // Summary: Returns the content of the cell 
+      // Syntax:
+      // [ <Result> = ] Cell_Read (<sCell>)
+      //
+      // Parameters:
+      //	sCell: cell whose value must be read
+      // Return value:
+      // 	Undefined type: value of the cell
+      //
+      // Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Cell_Read(sCell)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      RESULT :m_xExcel>>Range(sCell)>>Value
+      
+     type : 458752
+   -
+     name : Worksheet_Delete
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 4241254582679506923
+     type_code : 12
+     code : |1+
+      // Summary: Deletes the specified worksheet
+      // Syntax:
+      // [ <Result> = ] Worksheet_Delete ([<sWorksheetName>])
+      //
+      // Parameters:
+      // 	sWorksheetName: Name of the worksheet to delete (optional-> current worksheet)
+      // Return value:
+      // 	boolean: True if the process is successful 
+      //
+      // Automatic process of errors: RETURN FALSE
+      
+      Procedure VIRTUAL Worksheet_Delete(sLeafName=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Select the requested worksheet
+      IF sLeafName<>“” THEN
+      	:Worksheet_Select(sLeafName)
+      END
+      
+      // Delete the current worksheet from the workbook
+      :m_xExcel>>ActiveWindow>>SelectedSheets>>Delete()
+      
+      RESULT True 
+      
+     type : 458752
+   -
+     name : Column_Sort
+     internal_properties : CAAAAAgAAADLehy/m7GZAiZ+lU8lUMPo886Pn860fgPmE8BPfE3gMXMZoG1icR3SBCuZvMSYALu6yFA9ObGHMiENRaBdgkkfyEptwMpV0Zd46r8PwhEbAj/+oee1g5xeWfreEDfAYb+pBLTybB0byk9aWMASrc9RYOZ/7ge4zKEzpm2npnChO9+F7fS/dDIrTWnWKGoqXByr6LnTjN4eFqlWnfz9fSw/
+     procedure_id : 4241254589924251332
+     type_code : 12
+     code : |1+
+      // Summary: Sorts the column
+      // Syntax:
+      //[ <Result> = ] Column_Sort ([<sColumn> [, <sOrder>]])
+      //
+      // Parameters:
+      //	sColumn: Name of the column to sort (ex: B)
+      //	sOrder (default value="ASC"): Sort order: ASC or DESC
+      // Return value:
+      // 	boolean:  True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Sort(sColumn=“”, sOrder=“ASC”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // select the column
+      IF sColumn<>“” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // Excel constant for order
+      nOrder is int
+      IF sOrder~=“DESC” THEN
+      	nOrder=2
+      ELSE
+      	nOrder=1
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // Sort
+      :m_xExcel>>Selection>>Sort(:m_xExcel>>Selection, nOrder)
+      
+      RESULT True
+     type : 458752
+   -
+     name : IsVisible
+     internal_properties : CAAAAAgAAAC83qIQ+65VAvvJlgIUZx1LzO4Dey4UNuHylV4/cQbVIdQVN7IBg71WpINRNTLZAYw9i2e2EWxhpFMW66Toc7KV2NpMw3YEPs031NSSWk8q18toKe4qiz99XZ+2IRJWjB6ZLiZYxhU8N6QaTPrFedPJxL5HL6PdYuexZFswFgcWfMUBpx5hXJOxyBYHXoDvnBR+7VrZajuIzIQe2A8vyBnLDLa80+9/86zHYgp//LKBFNsFBVFsBW+w7EL1EeY9rJqjkeY4kzGwDXnoMzbxDEpeZgsaoH3un8dLgJZ7O0YqagiAzKXdT4PciEAjLdA3CjSeU58=
+     procedure_id : 4241254590129313536
+     type_code : 12
+     code : |1-
+      // Summary: Modifies the visibility status of Excel
+      // Syntaxe :
+      //[ <Résultat> = ] IsVisible ( [<bStatus>])
+      //
+      // Paramètres :
+      //	bStatus (valeur par défaut=1) : 1 = True to make visible
+      // Traitement automatique des erreurs : RENVOYER FAUX
+      //
+      
+      // Return value:
+      // 	boolean: True if the process is successful 
+      // Automatic process of errors: RETURN FALSE
+      Procedure IsVisible(bStatus=True)
+      // status of Excel (visible/invisible)
+      
+      IF bStatus THEN
+      	// Excel is visible
+      	:m_xExcel>>visible=True
+      ELSE
+      	// Excel is not visible
+      	:m_xExcel>>visible=False
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Color
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1681411295276735015
+     type_code : 12
+     code : |1+
+      // Summary: Modifies the color of a cell, text color and background color
+      // Syntax:
+      //[ <Result> = ] Cell_Color ( [<sRange> [, <sTextColor> [, <sBackgroundColor>]]])
+      //
+      // Parameters:
+      //	sRange: Range of cells to select
+      //	sTextColor: requested color for the text (optional)
+      //	sBackgroundColor: requested color for the background of the cell (optional)
+      // Return value:
+      // 	boolean: true if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure Cell_Color(sRange=“”, sTextColor=“”, sBgrColor=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Colors: NONE, BLACK, RED, GREEN, BLUE, YELLOW
+      
+      
+      IF sRange<>“” THEN
+      	
+      	// Select the cell
+      	:Cell_Select(sRange)
+      	
+      	// check the selection
+      	:m_xExcel>>Selection
+      	
+      	// font color
+      	IF sTextColor<>“” THEN
+      		:m_xExcel>>Selection>>Font>>Color = :nColorConst(sTextColor)
+      	END
+      	
+      	// background color
+      	IF sBgrColor<>“” THEN
+      		:m_xExcel>>Selection>>Interior>>Color = :nColorConst(sBgrColor)
+      	END
+      	
+      	RESULT True 
+      END
+      
+      RESULT False 
+     type : 458752
+   -
+     name : Cell_Weight
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1681411299571768456
+     type_code : 12
+     code : |1-
+      // Summary: Modifies the weight of a cell
+      // Syntax:
+      //[ <Result> = ] Cell_Weight ( [<nBold> [, <nItalic> [, <nUnderlined>]]])
+      //
+      // Parameters:
+      //	nBold: "", -1, 0, 1
+      //	nItalic: "", -1, 0, 1
+      //	nUnderlined: "", -1, 0, 1
+      // Return value:
+      // 	boolean: // 	None
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure Cell_Weight(nBold=“”, nItalic=“”, nUnderline=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // bold
+      SWITCH nBold
+      	CASE 1
+      		:m_xExcel>>Selection>>Font>>Bold = True
+      	CASE 0
+      		:m_xExcel>>Selection>>Font>>Bold = False
+      	CASE -1
+      		// we switch
+      		IF :m_xExcel>>Selection>>Font>>Bold = True THEN
+      			:m_xExcel>>Selection>>Font>>Bold = False
+      		ELSE
+      			:m_xExcel>>Selection>>Font>>Bold = True
+      		END			
+      END
+      
+      // Italic
+      SWITCH nItalic
+      	CASE 1
+      		:m_xExcel>>Selection>>Font>>Italic = True
+      	CASE 0
+      		:m_xExcel>>Selection>>Font>>Italic = False
+      	CASE -1
+      		// we switch
+      		IF :m_xExcel>>Selection>>Font>>Italic = True THEN
+      			:m_xExcel>>Selection>>Font>>Italic = False
+      		ELSE
+      			:m_xExcel>>Selection>>Font>>Italic = True
+      		END			
+      END
+      
+      // Underline
+      SWITCH nUnderline
+      	CASE 1
+      		:m_xExcel>>Selection>>Font>>Underline = 2 // xlUnderlineStyleSingle
+      	CASE 0
+      		:m_xExcel>>Selection>>Font>>Underline = 1 // xlUnderlineStyleNone
+      	CASE -1
+      		// we switch
+      		IF :m_xExcel>>Selection>>Font>>Underline = 2 THEN
+      			:m_xExcel>>Selection>>Font>>Underline = 1 // xlUnderlineStyleNone
+      		ELSE
+      			:m_xExcel>>Selection>>Font>>Underline = 2 // xlUnderlineStyleSingle
+      		END			
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_VerticalAlignment
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1682405004182832907
+     type_code : 12
+     code : |1-
+      // Summary: Specifies the vertical alignment of the selected cells
+      // Syntax:
+      //[ <Result> = ] Cell_VerticalAlignment ([<sRange> [, <nAlignment>]])
+      //
+      // Parameters:
+      //	sRange: selected cells
+      //	nAlignment (default value=1:top): 1->top, 2->center, 3->bottom
+      // Return value:
+      // 	boolean: // 	None
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_VerticalAlignment(sRange=“”, nAlignment=::cnAlignV_Top)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // select the requested range
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      nAlignConstant is int 
+      
+      // If the alignment is correct
+      IF nAlignment IN (::cnAlignV_Bottom,::cnAlignV_Center,::cnAlignV_Top) THEN
+      	// Specifies the vertical alignment of the cells found in the selected range
+      	
+      	SWITCH nAlignment
+      		CASE 1 : //"TOP"
+      			nAlignConstant = -4160	//xlTop
+      		CASE 2 : //"CENTRAL"
+      			nAlignConstant = -4108 //xlCenter
+      		CASE 3 : //"BOTTOM"
+      			nAlignConstant = -4107 //xlBottom
+      		OTHER CASE 
+      			nAlignConstant = -4107 //xlBottom
+      	END					
+      	
+      	// perform the requested alignment	
+      	:m_xExcel>>Selection>>VerticalAlignment = nAlignConstant	
+      	RESULT True
+      	
+      END
+      
+      // The alignment cannot be performed
+      RESULT False
+     type : 458752
+   -
+     name : Row_Delete
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1682413177505730654
+     type_code : 12
+     code : |1+
+      // Summary: Deletes the specified rows
+      // Syntax:
+      //[ <Result> = ] Row_Delete ([<sRange>])
+      // Parameters:
+      //	sRange: range of cells to select (optional)
+      // Return value:
+      // 	boolean: True if the process is successful 
+      // Automatic process of errors: RETURN FALSE
+      
+      
+      Procedure VIRTUAL Row_Delete(sRange = “”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      // select the requested range
+      IF sRange<>“” THEN
+      	// select the row
+      	:Cell_Select(sRange)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // delete the rows
+      :m_xExcel>>Selection>>Delete(-4162) // xlUp
+      
+      RESULT True
+      
+     type : 458752
+   -
+     name : Worksheet_Occurrence
+     internal_properties : CAAAAAgAAAD/xn8CHAC2d3BMexVl2s2wGHvf5HSjJVSXtQYifXYx+IdzWiephWCeVNM3KMTFNXDNPZ/RBG35KiOkPvrb/KpdIT0Za3zEGduyAVBo5a+lp2cM21lxjGylcJZDeQw4rRazqAf2TPdJUTN5VHDsRroWB6bl8SVPFThN/YCjdX3xxJSFOK2Op7I91w==
+     procedure_id : 1682426595011525797
+     type_code : 12
+     code : |1-
+      // Summary: Number of worksheets in the workbook
+      // Syntax:
+      //[ <Result> = ] Worksheet_Occurrence ()
+      // Parameters:
+      //	None
+      // Return value:
+      // 	Undefined type: Number of worksheets in the workbook
+      // Automatic process of errors: RESULT 0
+      //
+      
+      Procedure VIRTUAL Worksheet_Occurrence()
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      RESULT :m_xExcel>>Sheets()>>count()
+     type : 458752
+   -
+     name : Column_Delete
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1682433144852201623
+     type_code : 12
+     code : |1+
+      // Summary: Deletes the specified column
+      // Syntax: 
+      //[ <Result> = ] Column_Delete ([<sRange>])
+      // Parameters:
+      //	sRange: Subscript of the first column to delete
+      // Return value:
+      // 	boolean: true if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      
+      Procedure VIRTUAL Column_Delete(sRange = “”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // select the requested range
+      IF sRange<>“” THEN
+      	// select the row
+      	:Cell_Select(sRange)
+      END
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // deleting the columns
+      :m_xExcel>>Selection>>Delete(-4159) // xlToLeft
+      
+      RESULT True
+     type : 458752
+   -
+     name : _StartOrUseInstance
+     internal_properties : CAAAAAgAAABkLmX7X/XnaFv9eGAgrsK1eOLDKkbh3SojDnIL25DZoJPYG6jP0p36ZpIwRRT5OwlFnQKMVtDBv17YMkdArHD+uQabPCIIhLkVxPAfxUDa7PIICGPXBkyCgEjtvCswgZ9SBZdgGzH/ffZLvHY3iSwtyB6vqs2R8jmco4mxAaq0++YYuivgmdi7nf7bc1nfHyOoSvhSVluNwjCmNpZWRCq5BdHKRCSdPYTADDFiDndqhHYlkS6nZ1J7E9pOS1u6gONcgW2/R63t5M882kRlk5i9DX7CfY1o0LsM+5/A1AIbzaYHMP5DdRgUiZb5Inqz0JjL9cOISrQZ5k6Y/gZXhVa9Xek=
+     procedure_id : 1682463248280335528
+     type_code : 12
+     code : |1+
+      // Syntax:
+      //_StartOrUseInstance ([<bRecycle>])
+      // Retrieves the active instance of OpenOffice
+      // Parameters:
+      // 	bRecycle (default value=0): <specify the role of bRecycle>
+      // Return value:
+      // 	None
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure PRIVATE _StartOrUseInstance(bRecycle = False)
+      // if bRecycle=True, use Excel that is already opened
+      
+      // check whether Excel is installed and retrieve its version
+      nVersion is int
+      nVersion = :nOfficeVersion(“Excel”)
+      IF nVersion = 0 THEN
+      	EndProgram(“Excel is not installed on this computer, you cannot use this class!”)
+      	RETURN
+      END
+      IF nVersion < 8 THEN
+      	EndProgram(“To use this class, Excel 97 or later must be installed!”)
+      	RETURN
+      END
+      
+      // version of Excel
+      :m_nVersion = nVersion
+      
+      
+      // if Excel is not already allocated
+      IF :m_xExcel = Null THEN
+      	// if the user wants to use Excel that is already opened
+      	IF bRecycle THEN
+      		:m_xExcel = GetActiveObject(“Excel.Application”)
+      		IF :m_xExcel = Null THEN
+      			// allocate one if no Excel is already opened 
+      			:m_xExcel = new object OLE “Excel.Application”	
+      			:IsVisible(True)		
+      		END
+      	ELSE
+      		// allocate a new one
+      		:m_xExcel = new object OLE “Excel.Application”
+      		:IsVisible(True)
+      	END
+      END
+      
+     type : 458752
+   -
+     name : Worksheet_Name
+     internal_properties : CAAAAAgAAABOYCDJwxHSd/lgjfd23paR5rEwhbLJBAVjnjGpCcxcoo2q7RQBu6XgBnWnurQrwR4Wv20vWgRUn65vWA/gaCZAlOuI2Vn0tZSuECIaI+Rka6jrk6ElRNgozgH/49IhMNjyLTGCzOXftrfwOPwMExlyPnFPU/urtQ/2M57jXQFiGAEaEJOSWnOd0ETO
+     procedure_id : 1682479586387968545
+     type_code : 12
+     code : |1+
+      // Summary: Returns the name of the specified worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Name ([<pnSubscript>])
+      // Parameters:
+      //	pnSubscript (default value=0): Subscript of the worksheet to interrogate or empty to find out the name of the active worksheet
+      // Return value:
+      // 	Undefined type: Name of the worksheet
+      // Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Worksheet_Name(pnSubscript=0)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      sLeafName is string
+      
+      IF pnSubscript<0 OR pnSubscript>:Worksheet_Occurrence() THEN
+      	RESULT “”
+      END
+      
+      IF pnSubscript=0 THEN
+      	// Name of the current worksheet
+      	sLeafName = :m_xExcel>>ActiveSheet>>Name()
+      ELSE
+      	// Name of the specified worksheet
+      	sLeafName = :m_xExcel>>Sheets>>item(pnSubscript)>>Name()
+      END
+      
+      RESULT sLeafName
+     type : 458752
+   -
+     name : Worksheet_Exist
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1682481892796690919
+     type_code : 12
+     code : |1+
+      //Summary: Checks the existence of a worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Exist (<psWorksheetName>)
+      // Parameters:
+      //	psWorksheetName: Name of the worksheet
+      // Return value:
+      // 	boolean: True if the worksheet exists
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Exist(psLeafName)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      sLeafName is string 
+      
+      nNbWorksheets is int = :Worksheet_Occurrence()
+      FOR i = 1 TO nNbWorksheets	
+      	sLeafName = :m_xExcel>>Sheets>>item(i)>>Name
+      	IF sLeafName = psLeafName THEN
+      		RESULT True 
+      	END
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Worksheet_Select
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1682488047492091629
+     type_code : 12
+     code : |1-
+      // Summary: Selects a worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Select (<sWorksheet>)
+      //
+      // Parameters:
+      //	sWorksheet: Name of the worksheet to select
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Select(sSheet)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      //select the requested worksheet
+      :m_xExcel>>Sheets(sSheet)>>Select()
+      
+      ArrayDeleteAll(:m_sArrSelectedWorksheets)
+      ArrayAdd(:m_sArrSelectedWorksheets,sSheet)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Type
+     internal_properties : CAAAAAgAAABOYCDJwxHSd/lgjfd23paR5rEwhbLJBAVjnjGpCcxcoo2q7RQBu6XgBnWnurQrwR4Wv20vWgRUn65vWA/gaCZAlOuI2Vn0tZSuECIaI+Rka6jrk6ElRNgozgH/49IhMNjyLTGCzOXftrfwOPwMExlyPnFPU/urtQ/2M57jXQFiGAEaEJOSWnOd0ETO
+     procedure_id : 1683526944096659573
+     type_code : 12
+     code : |1+
+      // Summary: Returns the type of a cell (empty, value, text or formula)
+      // Syntax:
+      //[ <Result> = ] Cell_Type (<sCell>)
+      // Parameters:
+      //	sCell: Cell to interrogate
+      // Return value:
+      // 	Undefined type: 
+      // Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Cell_Type(sCell)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      //Defines whether the cell is a formula
+      IsAFormula is boolean = :m_xExcel>>Range(sCell)>>HasFormula
+      
+      IF IsAFormula THEN
+      	
+      	RESULT “FORMULA”
+      	
+      ELSE
+      	
+      	vVariant is variant = :m_xExcel>>Range(sCell)>>Value
+      	
+      	IF vVariant = Null THEN
+      		RESULT “EMPTY”
+      	ELSE
+      		
+      		SWITCH vVariant..Type
+      			CASE wlString :
+      				RESULT “TEXT”
+      			OTHER CASE :
+      				RESULT “VALUE”
+      				
+      		END
+      	END		
+      	
+      END
+      
+     type : 458752
+   -
+     name : PrintPreview
+     internal_properties : CAAAAAgAAAClhI5peTMMMgAkN9lH9mt6Y36r4wxSZPf4RRpZVqMg6zflqDWYv7v68okPLua+TInSeCwJx+fNcqdHgy6jtK117MZZvFwPe89a0EVxlKfDTPAvUICOXntFEmM1yWZx+oCiDUO7RQQCMTAzr1n12igKXVv6o4zPZ9jEN3SoJaH2qOya6MG8J+FWuh6pfTkzacHwxZzw4YE5Mc48Y5JLD5Kh
+     procedure_id : 1683573239569882614
+     type_code : 12
+     code : |1+
+      // Summary: Starts the print preview
+      // Syntax:
+      //[ <Result> = ] PrintPreview ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:   True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL PrintPreview()
+      
+      // Is there an active document
+      IF :IsOpened() = False THEN
+      	RESULT False
+      END
+      
+      // Call the print feature of Excel
+      :m_xExcel>>ActiveWindow>>SelectedSheets>>PrintPreview()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_AddSelection
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1683577534549778780
+     type_code : 12
+     code : |1-
+      // Summary: Selects a worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_AddSelection (<nSubscript>)
+      //
+      // Parameters:
+      //	nSubscript: Name of the worksheet to select
+      // Return value:
+      // 	boolean:   True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_AddSelection(nSubscript)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      sLeafName is string
+      
+      //select the requested worksheet
+      sLeafName = :m_xExcel>>Sheets>>Item(nSubscript)>>Name
+      
+      ArrayAdd (:m_sArrSelectedWorksheets, sLeafName)
+      
+      //select the requested worksheet
+      :m_xExcel>>Sheets(:m_sArrSelectedWorksheets)>>Select()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Border
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1687289292512485193
+     type_code : 12
+     code : |1+
+      // Summary: Used to define the borders for a cell or range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Border ( [<sRange> [, <nBorder> [, <nThickness> [, <nColor>]]]])
+      //
+      // Parameters:
+      //	sRange (default value=""): Range of cells
+      //	nBorder (default value=1): Number of sides for the border (all by default)
+      //	nThickness (default value=-4138): Thickness of the border (medium thickness by default)
+      //	nColor (default value=0): Color of the border (black by default)
+      // Return value:
+      // 	boolean:  true if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Border(sRange = “”, nBorder = CExcel::cnAllBorders, nThickness = CExcel::cnMediumThickness, nColor = 0)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      
+      //We want all the borders
+      IF nBorder =CExcel::cnAllBorders THEN
+      	// Place the requested type of border at the requested location
+      	:m_xExcel>>Selection>>Borders>>LineStyle = ::cnBorderTypeSolid
+      	//with the requested thickness
+      	:m_xExcel>>Selection>>Borders>>Weight = nThickness
+      	//with the requested color
+      	:m_xExcel>>Selection>>Borders>>Color = nColor
+      ELSE
+      	//We want a specific border
+      	// Place the requested type of border at the requested location
+      	:m_xExcel>>Selection>>Borders>>Item(nBorder)>>LineStyle = ::cnBorderTypeSolid
+      	//with the requested thickness
+      	:m_xExcel>>Selection>>Borders>>Item(nBorder)>>Weight = nThickness
+      	//with the requested color
+      	:m_xExcel>>Selection>>Borders>>Item(nBorder)>>Color = nColor
+      END
+      
+      RESULT True 
+      
+      
+     type : 458752
+   -
+     name : Cell_Pattern
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1687303925498633356
+     type_code : 12
+     code : |1+
+      // Summary: Used to modify the style of pattern for a cell or for a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Pattern ([<sRange> [, <nPatternStyle> [, <nColor>]]])
+      //
+      // Parameters:
+      //	sRange: range of cells to select
+      //	nPatternStyle (default value=14): style of requested pattern
+      //	nColor: Color of the pattern
+      // Return value:
+      // 	boolean:     True if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Pattern(sRange=“”, nPatternStyle=::cnTopDiagonalPattern, nColor=RGB(60,60,60))
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      
+      // check the selection
+      :m_xExcel>>Selection
+      
+      // Use the requested pattern
+      :m_xExcel>>Selection>>Interior>>Pattern 		= nPatternStyle
+      // Use the requested color 
+      :m_xExcel>>Selection>>Interior>>PatternColor 	= nColor
+      
+      RESULT True 
+     type : 458752
+   -
+     name : Worksheet_Add
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1687322307968576469
+     type_code : 12
+     code : |1-
+      // Summary: Adds a worksheet to the workbook
+      // Syntax:
+      //[ <Result> = ] Worksheet_Add ([<sWorksheetName>])
+      //
+      // Parameters:
+      //	sWorksheeetName: name that will be given to the new worksheet
+      // Return value:
+      // 	boolean:  true if the process is successful
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Add(sLeafName=“”)
+      
+      // Is there an active document
+      IF :IsOpened()=False THEN
+      	RESULT False
+      END
+      
+      
+      //Add a sheet to the workbook
+      :m_xExcel>>Sheets>>Add()
+      
+      //retrieve the name of the current worksheet => name of the added worksheet
+      sNameAddedWorksheet is string = :Worksheet_Name()
+      
+      // rename if necessary
+      IF sLeafName<>“” THEN
+      	:Worksheet_Rename(sNameAddedWorksheet, sLeafName)
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : _bDetection
+     internal_properties : CAAAAAgAAAAhZf+b9FR3bNuoWTwT/sN+VdFJiefsFyzRIF5mfn3XV20uEWv7MEPzxpHe7n6dKuH5CjSCI/tpALOPNQ/kHZ7vV968zCAf+W4zM5fwLEl9CEADnW4A6wkYkD0rQfTYV03BwIGrbrykqpCLRYAdCmHvZPPtTD9LCgpkhyDOWfbm/WoitMV1xl85QZuiSNoUVivqRAfn4nD+ve5dSOfpPUx5g91PAqkS2Z8rrWAQNZAkKw==
+     procedure_id : 1687345925979720668
+     type_code : 12
+     code : |1-
+      // Summary: Indicates whether Excel is found on the current computer
+      // Syntax:
+      //[ <Result> = ] _bDetection ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:      // 	None
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure GLOBAL _bDetection()
+      
+      // Local variables
+      sKey, sSubKey 	are strings
+      nVersion 		is int = 0
+      
+      
+      // Checks the presence of Office
+      sKey = RegistryFirstSubKey(“HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Office\”)
+      
+      // If Office is not installed on the computer, then Word cannot be found either
+      IF sKey~=“” THEN RESULT False
+      
+      // If Office is found on the computer: checks the presence of the program
+      WHILE sKey<>“”
+      	// First sub-key of the program
+      	sSubKey = RegistryFirstSubKey(sKey+“\Excel\”)
+      	// If the program is found, retrieve its version
+      	IF sSubKey<>“” THEN
+      		// Keep the latest version
+      		nVersion = Max(Val(ExtractString(sKey,1,“\”,FromEnd)),nVersion)		
+      	END
+      	// Next key
+      	sKey = RegistryNextKey(sKey)
+      END
+      
+      RESULT (nVersion<>0)
+     type : 458752
+   -
+     name : IsOpened
+     procedure_id : 1695004647196877269
+     type_code : 12
+     code : |1+
+      // Syntax:
+      //[ <Result> = ] IsOpened ()
+      // Used to check whether the workbook is still opened
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:    True of the workbook is opened
+      
+      Procedure VIRTUAL IsOpened()
+      
+      WHEN EXCEPTION IN
+      	// attempt to access the active worksheet of the workbook
+      	:m_xExcel>>ActiveSheet>>Name()
+      	RESULT True
+      DO
+      	RESULT False
+      END
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+resources :
+ string_res :
+  identifier : 0x3be2b4383c30ba0a
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

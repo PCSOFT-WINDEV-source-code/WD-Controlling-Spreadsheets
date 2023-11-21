@@ -1,0 +1,130 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : WD Controlling Spreadsheets
+ major_version : 28
+ minor_version : 0
+ type : 4097
+ description : Controlling Excel and OOCalc
+ subtype : 0
+project :
+ identifier : 0x0
+ internal_properties : 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
+ configurations :
+  -
+    name : WD Controlling Spreadsheets
+    internal_properties : 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
+    configuration_id : 7016673560161283398
+    type : 1
+    generation_name : WD Controlling Spreadsheets.exe
+    version :
+     version : VI180036D
+     autoincrement_version : false
+    icon_filename : .\VST18120d-32-5.ico
+    language : 2
+    new_features_help :
+     name : ""
+     internal_properties : CAAAAAgAAACx0grzvM43CdCyI5B4cP4zOdU1HHjVGn01elKl8lOxvKqJEfJbRHLyfzGLytV90yMRODjhsi1q
+ elements :
+  identifier : 0x4af44a0b001924f7
+  elements :
+   -
+     name : CSpreadsheet
+     identifier : 0x4755518a0002347d
+     internal_properties : CAAAAAgAAADVsT1hXjtzrLG569acgAz9MbD4IJg62ByqcDUcuU7EZOQMvZuRseymAj64AIBwCPjAQA==
+     physical_name : .\CSpreadsheet.wdc
+     type : 4
+   -
+     name : Global procedures of WD Controlling Spreadsheets
+     identifier : 0x4755383000002e92
+     internal_properties : CAAAAAgAAADqYNI29bL6JTgwVl0LCIVmjjF9vZHTC76KlOYS1VI63mKIIyUaKGUhibUviQnHsyXvdw==
+     physical_name : .\Global procedures of WD Controlling Spreadsheets.wdg
+     type : 7
+   -
+     name : CChooseSpreadsheet
+     identifier : 0x475d6ea40001fdb8
+     internal_properties : CAAAAAgAAABJxbFVUg8nyO0Vt7I4LuRdLXgkJIBS5DCK2JSSq0zOCjY6Dzn1FUgCrmpUrHRsFIRM1A==
+     physical_name : .\CChooseSpreadsheet.wdc
+     type : 4
+   -
+     name : SelColorWin
+     identifier : 0x47598f6f00005086
+     internal_properties : CAAAAAgAAAB82lRAfySMn6aqHOfN1EtAeG8Hb29tmL2t4pHGgYYO4hLM+81g4htX8y+pF59RKZ9p6Q==
+     physical_name : .\SelColorWin.wdw
+     type : 2
+   -
+     name : CWorkbook
+     identifier : 0x475552b50003c660
+     internal_properties : CAAAAAgAAAA2HB4CoZ6WmbykGuHP30lKuuuxmSuFQYWuagqtgrVnoaur/Mxm5BlV/TmjHeUb59kjIw==
+     physical_name : .\CWorkbook.wdc
+     type : 4
+   -
+     name : WIN_Main
+     identifier : 0x4755776400000fc1
+     internal_properties : CAAAAAgAAACxjek9Crf/MDVNvzqwqVBBpfawkBa4nwSjnf6xhLNjnaux9MR9jcD6VsI8hAzEvCyUnA==
+     physical_name : .\WIN_Main.wdw
+     type : 2
+   -
+     name : CExcel
+     identifier : 0x475552b60004ca46
+     internal_properties : CAAAAAgAAAAxDWm9ijd/sLXNP7owO+ylzUow4P7JDk+2JChUHj1ZR6Fzckb9DUB61kK8BIxEPKwUHA==
+     physical_name : .\cexcel.wdc
+     type : 4
+  other_elements :
+   -
+     physical_name : .\description.gif
+   -
+     physical_name : .\description.rtf
+  uml_model : .\Modèle WD Pilotage de Tableurs.uml
+  net_assemblies : []
+  uwp_api : []
+  external_components : []
+  internal_components : []
+ report_and_queries_enabled : false
+ common_generation_directory : true
+ languages :
+  - en-GB
+ code_elements :
+  internal_properties : CAAAAAgAAADC6J7LLjtFYI8TrylsXQj82EZoLV2d4ivmB8W7/Vr82bohPlkCnn5C6tfjO2lNS+4xriA9QgOooa0WJ6u6cXjazt8yaJErcHbFwFIK9MOdNrY2lvU7pA==
+  type_code : 0
+  p_codes :
+   -
+     code : |1-
+      
+     type : 196608
+   -
+     code : |1-
+      
+     type : 196610
+   -
+     code : |1-
+      
+     type : 196619
+   -
+     type : 196621
+   -
+     type : 196627
+     enabled : false
+  orphans :
+   -
+     name : WD Controlling Spreadsheets
+     identifier : 0x4af44a0b00232555
+     code_elements :
+      type_code : 159
+      p_codes : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+rad :
+ internal_properties : CAAAAAgAAABhIL0UXeZmxDJxY3Xy0Q==
+project_explorer :
+ explorer_type : project
+ children :
+  -
+    name : Windows Store Apps API
+    explorer_type : custom_folder
+resources :
+ string_res :
+  identifier : 0x0
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+custom_note :
+ internal_properties : CAAAAAgAAAAd98VSJfHHqE3P0QHwrwdhn7ig8dWBR6valpUTgnAMTVXiDg==

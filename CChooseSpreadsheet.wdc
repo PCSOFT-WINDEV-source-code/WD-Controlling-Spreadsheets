@@ -1,0 +1,222 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CChooseSpreadsheet
+ major_version : 28
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x10ed4947074167c2
+ internal_properties : CAAAAAgAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : CAAAAAgAAABm4PVFe9JAHaoZ7pWrapr167xJBrSdz0axAnnnfYhOQaaZf6aFmw+87+hdnze0968KI3y7g0wMbri74fT3L3UE/39pGg==
+  type_code : 10
+  p_codes :
+   -
+     internal_properties : CAAAAAgAAAAF78BLl9GU8tXmY4wQO17ftefmEP7L39dF9O/yDFHJmedSUKRlHv0ttoXj6uDOw2TFCGio5n5H679GpcZfYR01/AAJdPD5metBI3eNvUsHm4rwSWgp/ENCscGCPUaiEsGQ6Oy6xT6YcGZI+aI=
+     code : |1-
+      // This class is used to choose the spreadsheet object to use 
+      CChooseSpreadsheet is Class
+      	
+      GLOBAL
+      	m_pclSpreadsheet		is CSpreadsheet dynamic	// Spreadsheet object
+      	
+      	
+      	CONSTANT
+      		csProduct_OOCalc	= “OOCalc”
+      		csProduct_Excel		= “Excel”
+      		
+      	END
+      	
+      END
+     type : 131072
+   -
+     code : |1-
+      
+     type : 131074
+  procedures :
+   -
+     name : Constructor
+     procedure_id : 1219711643500570578
+     type_code : 27
+     code : |1+
+      Procedure Constructor()
+     type : 589824
+   -
+     name : Destructor
+     procedure_id : 1219711643500636114
+     type_code : 28
+     code : |1+
+      Procedure Destructor()
+     type : 655360
+   -
+     name : DefaultSpreadsheet
+     internal_properties : CAAAAAgAAAAZwxPhFiVrCy34oSmDrG1lDuVUfGycUXnd2unjKWBSJf83cuR4uMH3ysU9MDwD6/PDAlEbijpSioH2GEbuHNaI/X91zZMr5ho2wzpUTlFWiOZvl07sv1h3qqr16h6ENOppL+f5Eqt791ROWek9sM6uKPoJzK2grVPgaK4czmdgA2dy05KcFnvzirmziu33ipcNIJtSsTQIRpSdTl/oBCxRACGqU+oaSX4zeb5jXhVt
+     procedure_id : 1219711643500701650
+     type_code : 12
+     code : |1-
+      // Summary: Indicates the default spreadsheet
+      // Syntax:
+      //[ <Result> = ] DefaultSpreadsheet ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	Undefined type:       Spreadsheet object to handle, Null if none of the supported spreadsheets is found on the computer
+      //// Automatic process of errors: RESULT Null
+      //
+      
+      Procedure GLOBAL DefaultSpreadsheet()
+      
+      
+      // Is Excel installed on the computer?
+      IF CExcel::_bDetection() THEN
+      	// Allocate a CExcel object
+      	::m_pclSpreadsheet = new CExcel()
+      	RESULT ::m_pclSpreadsheet
+      END
+      
+      // Is Open Office Calc installed on the computer?
+      IF CWorkbook::_bDetection() THEN
+      	// Allocate a CWorkbook object
+      	::m_pclSpreadsheet = new CWorkbook()
+      	RESULT ::m_pclSpreadsheet
+      END
+      
+      // No supported spreadsheet is installed on the computer
+      RESULT Null
+     type : 458752
+   -
+     name : SpecificSpreadsheet
+     internal_properties : CAAAAAgAAADyJZ1il9ngaX0BmHprbC8na280KgHX03gixaPFsXJtt69sPohS0PDnOhulhzKjh7Uy/crewqT5aAGStwk9KiieVa6t+KMR7Zapurl9zu47CbTpmTVX0eYojPlTaVSYyysfpoWXEqgyOKKV/eg9otmtokGT1sHlgN7ufXSDlOMzjrf3jfzcx+i+EqxjY83hf5Bv0bko4VHLhVhFnVmISuV2
+     procedure_id : 1219711643500767186
+     type_code : 12
+     code : |1-
+      // Summary: Returns a specific spreadsheet object
+      // Syntax:
+      //[ <Result> = ] SpecificSpreadsheet (<sSpreadsheet>)
+      //
+      // Parameters:
+      //	sSperadsheet: Name of the spreadsheet object (see the constants)
+      // Return value:
+      // 	CSpreadsheet dynamic: Spreadsheet object to handle
+      //// Automatic process of errors: RESULT Null
+      //
+      
+      Procedure GLOBAL SpecificSpreadsheet(sSpreadsheet)
+      
+      // Local variables
+      
+      
+      // According to the selected spreadsheet
+      SWITCH sSpreadsheet 
+      	CASE ::csProduct_OOCalc
+      		// Is OOCalc installed on the computer?
+      		IF CWorkbook::_bDetection() THEN
+      			// Allocate a CWorkbook object
+      			::m_pclSpreadsheet = new CWorkbook()
+      		END
+      		
+      	CASE ::csProduct_Excel
+      		// Is Excel installed on the computer?
+      		IF CExcel::_bDetection() THEN
+      			// Allocate a CExcel object
+      			::m_pclSpreadsheet = new CExcel()
+      		END
+      		
+      		
+      	OTHER CASE
+      		dbgAssert(False, StringBuild(“%1 is not supported”, sSpreadsheet))
+      END
+      
+      // Returns the spreadsheet object
+      RESULT ::m_pclSpreadsheet
+     type : 458752
+   -
+     name : SpreadsheetChoice
+     internal_properties : CAAAAAgAAAC4AP8opcPhAIgUQCo33D+LHccVIAI/guuxinZBtI479oU6lk/8gGYixW5azA3bZ3r4OtQpl+bNlFo7+AQ+yF7xAgXt4IoFIYFtSNe2b6Bsbnyh7PnHGiezwMGN16CKijSnX79BfoCjiFHr6QzyVuAE4gBjveRSh8k+erxrQ/PO1Y1S9+FNRnsxmMObMxQHG+RSMrua34sLSjSeTqHZloGHZw/zxc+vRLje71hfJUH20Xf03x1/zR91pl3Q7Z7482faoIYZWC1xChkQIFJLhEVrbnI2XSa0Ew==
+     procedure_id : 1219711643500832722
+     type_code : 12
+     code : |1-
+      // Summary: Choosing the spreadsheet
+      // Syntax:
+      //[ <Result> = ] SpreadsheetChoice ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	Undefined type:      Spreadsheet object to handle
+      //// Automatic process of errors: RESULT Null
+      //
+      
+      Procedure GLOBAL SpreadsheetChoice()
+      
+      // Local variables
+      bExcelDetect		is boolean
+      bOOCalcDetect		is boolean
+      
+      
+      // Is Excel installed on the computer?
+      bExcelDetect 	= CExcel::_bDetection()
+      
+      // Is Open Office Calc installed on the computer?
+      bOOCalcDetect 	= CWorkbook::_bDetection()
+      
+      // If the two are installed: asks the user which one he wants to use
+      IF bExcelDetect AND bOOCalcDetect THEN
+      	//1: &Excel
+      	//2: &OOCalc
+      	SWITCH Dialog(<§?17834E58125DF3AA§>)
+      		// &Excel
+      		CASE 1
+      			::m_pclSpreadsheet = new CExcel()
+      			RESULT ::m_pclSpreadsheet
+      			
+      		// &OOCalc
+      		CASE 2
+      			::m_pclSpreadsheet = new CWorkbook()
+      			RESULT ::m_pclSpreadsheet	
+      	END
+      	
+      ELSE
+      	// Otherwise, returns the default spreadsheet
+      	RESULT (::DefaultSpreadsheet())
+      END
+      
+      RESULT Null
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+  original_name : CClasse1
+resources :
+ string_res :
+  identifier : 0x175d6e920005b90a
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+ dialogs :
+  -
+    identifier : 0x17834e58125df3aa
+    internal_properties : CAAAAAgAAADhQBGfZ+t5gmNIdn2pg0IH0QjrxUzTiNgkcXZXHy3UjGijXJ/k/px66YYtxRo/efR7/yP6es6FgSq0yJR9aFawEtnPjhM99m6jiw==
+    label :
+     fr-FR : "Les tableurs Excel et OOCalc sont installés sur votre poste.\r\nLequel souhaitez-vous utiliser ?"
+     en-GB : "Excel and OOCalc are installed on your computer.\r\nwhich one do you want to use?"
+    image : {}
+    cancel_button : 1
+    buttons :
+     -
+       label :
+        fr-FR : "&Excel"
+        en-GB : "&Excel"
+       image : {}
+       value : 1
+     -
+       label :
+        fr-FR : "&OOCalc"
+        en-GB : "&OOCalc"
+       image : {}
+       value : 2
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

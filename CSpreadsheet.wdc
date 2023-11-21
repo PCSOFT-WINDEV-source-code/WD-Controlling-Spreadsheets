@@ -1,0 +1,1035 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CSpreadsheet
+ major_version : 28
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x10ed494907d96f22
+ internal_properties : CAAAAAgAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : CAAAAAgAAAB866eP4Ets4TTLMsshqEz3fUrTsqRNJyKDnG3Fh2I4G2j/gv1+ctrBQKEsIohDsPZ15m8aTDv/o82gJIt8op0fGoBvBA==
+  type_code : 10
+  p_codes :
+   -
+     internal_properties : CAAAAAgAAADm4ZIMC4L1qCMOszbSR4Tvi9gJtYy1zNaBu39DPZe2V29ovLn95WcP7tpL8UWi9+SHeAen28l5cFPsjjmT7Hf/FP9G80Y694yJ5X6sCdwNQbrR8MlxecmXS3kLujCLUlVuNWfba6UMFVa/Vw==
+     code : |1-
+      // This class is used to control a spreadsheet: Excel, OpenOffice Calc
+      CSpreadsheet is Class
+      	
+      	///////////////////////////////////////////////////////////////////////////////////////////
+      	// Variables of the CSpreadsheet class
+      	m_sSpreadsheetName		is string
+      	
+      	///////////////////////////////////////////////////////////////////////////////////////////
+      	// Constants
+      	CONSTANT	
+      	
+      	// Constants for horizontal alignment
+      	cnAlignH_Left		= 1
+      	cnAlignH_Center		= 2
+      	cnAlignH_Right		= 3
+      	
+      	// Constants for vertical alignment
+      	cnAlignV_Top		= 1
+      	cnAlignV_Center		= 2
+      	cnAlignV_Bottom		= 3
+      	
+      	//Borders 
+      	cnAllBorders = 1 				//Value added to this project to manage all the borders in one go
+      	cnBorderDownwardDiagonal = 5 	//xlDiagonalDown
+      	cnBorderUpwardDiagonal = 6 		//xlDiagonalUp
+      	cnLeftBorder = 7 				//xlEdgeLeft
+      	cnTopBorder = 8 					//xlEdgeTop
+      	cnBottomBorder = 9 					//xlEdgeBottom
+      	cnRightBorder = 10 				//xlEdgeRight
+      	cnVerticalInsideBorder = 11 	//xlInsideVertical
+      	cnHorizontalInsideBorder = 12 	//xlInsideHorizontal
+      	
+      	//Type of cell border
+      	cnBorderTypeSolid = 1 			//xlContinuous
+      	cnBorderTypeDash = -4115 			//xlDash
+      	cnBorderTypeDashDot = 4 		//xlDashDot
+      	cnBorderTypeDashDotDot = 5 	//xlDashDotDot
+      	cnBorderTypeDot = -4118 			//xlDot
+      	cnBorderTypeDouble = -4119			//xlDouble
+      	cnBorderTypeLineStyleNone = -4142 	//xlLineStyleNone 
+      	cnBorderTypeDashDotOblique = 13 //xlSlantDashDot
+      	
+      	//Thickness of cell border
+      	cnThicknessVeryThin = 1 				//xlHairline
+      	cnThicknessThin = 2 					//xlThin
+      	cnMediumThickness = -4138 			//xlMedium
+      	cnThicknessThick = 4 				//xlThick
+      	
+      	//Style of pattern
+      	cnHorizontalPattern = 11 				//xlLightHorizontal
+      	cnVerticalPattern = 12 				//xlLightVertical
+      	cnBottomDiagonalPattern = 13 			//xlLightDown
+      	cnTopDiagonalPattern = 14 			//xlLightUp
+      	cnGridPattern = 15 					//xlGrid
+      	cnCrissCrossPattern = 16 				//xlCrissCross
+      	
+      END	
+      END
+     type : 131072
+   -
+     code : |1-
+      
+     type : 131074
+  procedures :
+   -
+     name : Constructor
+     procedure_id : 1219711652100468514
+     type_code : 27
+     code : |1+
+      Procedure Constructor()
+     type : 589824
+   -
+     name : Destructor
+     procedure_id : 1219711652100534050
+     type_code : 28
+     code : |1+
+      Procedure Destructor()
+     type : 655360
+   -
+     name : OpenWorkbook
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652100599586
+     type_code : 12
+     code : |1-
+      // Summary: Opens a document
+      // Syntax:
+      //[ <Result> = ] OpenWorkbook ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:    True if the document is opened, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL OpenWorkbook()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Create
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652100665122
+     type_code : 12
+     code : |1-
+      // Summary: Create a new document
+      // Syntax:
+      //[ <Result> = ] Create ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:  True if the document is created, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Create()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Save
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652100730658
+     type_code : 12
+     code : |1-
+      // Summary: Saves the current document
+      // Syntax:
+      //[ <Result> = ] Save ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the document is saved, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      Procedure VIRTUAL Save()
+      
+      RESULT True
+     type : 458752
+   -
+     name : SaveAs
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652100796194
+     type_code : 12
+     code : |1-
+      // Summary: Saves the current document in a selected file
+      // Syntax:
+      //[ <Result> = ] SaveAs ([<sDocumentPath>])
+      //
+      // Parameters:
+      //	sDocumentPath (default value=""): Full path of the document
+      // Return value:
+      // 	boolean:  True if the document is saved, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL SaveAs(sDocumentPath <useful> =“”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Insert
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652100861730
+     type_code : 12
+     code : |1-
+      // Summary: Inserts a row
+      // Syntax:
+      //[ <Result> = ] Row_Insert ([<nPosition>])
+      //
+      // Parameters:
+      //	nPosition (default value=0): Position where the row must be inserted
+      // Return value:
+      // 	boolean:  True if the row is inserted, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Insert(nPosition <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Hide
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652100927266
+     type_code : 12
+     code : |1+
+      // Summary: Masks a row
+      // Syntax:
+      //[ <Result> = ] Row_Hide ([<nRowSubscript> [, <bHidden>]])
+      //
+      // Parameters:
+      //	nRowSubscript (default value=""): Subscript of the row to hide
+      //	bMasked (default value=1): True to mask the row, False otherwise
+      // Return value:
+      // 	boolean:  True if the row is hidden, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Hide(nRowSubscript <useful> = “”, bMask <useful> =True)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Height
+     internal_properties : CAAAAAgAAACPyAiU0RBDh4BfqMkOLwRISzt3efQuj3zUj2NQT5Cb8nEQOj2tVWHcDH+a2C/rsrkfHQ1n5cFTHc1RfWRjulo/k9ovTI/N2QOLVhRRm/NMTZ/n2qtR9bG7V43sUSEcWYaQyGTpwHDrKxVpED7uevceZ7FsaO8JHeN7BV9e9KxSDN3KH/XBzAhCtpF3NMMqpqJlkKbn/qrRVq1/WfOpSEzKew==
+     procedure_id : 1219711652100992802
+     type_code : 12
+     code : |1-
+      // Summary: Modifies the height of a row
+      // Syntax:
+      //[ <Result> = ] Row_Height ([<nRowSubscript> [, <nHeight>]])
+      //
+      // Parameters:
+      //	nRowSubscript (default value=""): Subscript of the row to resize
+      //	nHeight (default value=1): New height of the row
+      // Return value:
+      // 	boolean: True if the height of the row is modified, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Height(nRowSubscript <useful> = “”, nHeight <useful> =1)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Width
+     internal_properties : CAAAAAgAAADPiMjUgfAjJ4C/6EnOz6Roq9uXeZQO71zUryPQj/B70lHwmv0N9cE8zF8a2K9Lkhn/PW0nBaGzvY3xPaSjWvrfc7pPTG/t+ePLNlRRm1MsLe8XintB5YEr5z0cgXEsqVZgeJQ5MGA72yWZwO5+ygcuN+GcuJ95bROLtU+OxHxiXK16z0VxPFhyhsHnpFO6djK1QFa3LhqhRn2vCSPpCAwKOw==
+     procedure_id : 1219711652101058338
+     type_code : 12
+     code : |1-
+      // Summary: Modifies the width of a column
+      // Syntax:
+      //[ <Result> = ] Column_Width ([<sColumn> [, <nWidth>]])
+      //
+      // Parameters:
+      //	sColumn (default value=""): Name of the column to resize
+      //	nWidth (default value=1): New width of the column
+      // Return value:
+      // 	boolean:   True if the width of the column is modified, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Width(sColumn <useful> = “”, nWidth <useful> =1)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Insert
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101123874
+     type_code : 12
+     code : |1-
+      // Summary: Inserts a column
+      // Syntax:
+      //[ <Result> = ] Column_Insert ([<sColumn>])
+      //
+      // Parameters:
+      //	sColumn (default value=""): Name of the column selected for the insertion
+      // Return value:
+      // 	boolean:    True if the column is inserted, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Insert(sColumn <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Mask
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101189410
+     type_code : 12
+     code : |1+
+      // Summary: Masks a column
+      // Syntax:
+      //[ <Result> = ] Column_Mask ([<sColumn> [, <bMasked>]])
+      //
+      // Parameters:
+      //	sColumn (default value=""): Name of the column to hide
+      //	bMasked (default value=1): True to mask the column, False otherwise
+      // Return value:
+      // 	boolean:   True if the column is masked, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Mask(sColumn <useful> = “”, bMask <useful> =True)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Add
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101254946
+     type_code : 12
+     code : |1+
+      // Summary: Inserts a new worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Add ([<sWorksheetName>])
+      //
+      // Parameters:
+      //	sWorksheetName (default value=""): Name of the worksheet to insert
+      // Return value:
+      // 	boolean: True if the worksheet is added, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Add(sLeafName <useful> =“”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Rename
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101320482
+     type_code : 12
+     code : |1+
+      // Summary: Renames a worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Rename (<sWorksheetName>, <sNewName>)
+      //
+      // Parameters:
+      //	sWorksheetName: Name of the worksheet to rename
+      //	sNewName: New name of the worksheet
+      // Return value:
+      // 	boolean:  True if the worksheet is renamed, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Rename(sLeafName <useful> , sNewName <useful> )
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Select
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101386018
+     type_code : 12
+     code : |1+
+      // Summary: Selects a worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Select (<sWorksheetName>)
+      //
+      // Parameters:
+      //	sWorksheetName: Name of the worksheet to select
+      // Return value:
+      // 	boolean:  True if the worksheet is selected, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Select(sLeafName <useful> )
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Delete
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101451554
+     type_code : 12
+     code : |1-
+      // Summary: Deletes a worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Delete ([<sWorksheetName>])
+      //
+      // Parameters:
+      //	sWorksheetName (default value=""): Name of the worksheet to delete
+      // Return value:
+      // 	boolean:  True if the worksheet is deleted, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Delete(sLeafName <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : CloseWorkbook
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101517090
+     type_code : 12
+     code : |1-
+      // Summary: Closes the document
+      // Syntax:
+      //[ <Result> =  ] CloseSpreadSheet ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the document is closed, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL CloseWorkbook()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Select
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101582626
+     type_code : 12
+     code : |1-
+      // Summary: Selects a cell or a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Select (<sRangeOfCells>)
+      //
+      // Parameters:
+      //	sRangeOfCells: Range of cells to select
+      // Return value:
+      // 	boolean: True if the range of cells is selected, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Select(sCellRange <useful> )
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Read
+     internal_properties : CAAAAAgAAABOYCDJwxHSd/lgjfd23paR5rEwhbLJBAVjnjGpCcxcoo2q7RQBu6XgBnWnurQrwR4Wv20vWgRUn65vWA/gaCZAlOuI2Vn0tZSuECIaI+Rka6jrk6ElRNgozgH/49IhMNjyLTGCzOXftrfwOPwMExlyPnFPU/urtQ/2M57jXQFiGAEaEJOSWnOd0ETO
+     procedure_id : 1219711652101648162
+     type_code : 12
+     code : |1-
+      // Summary: Reads the content of a cell
+      // Syntax:
+      //[ <Result> = ] Cell_Read (<sCellName>)
+      //
+      // Parameters:
+      //	sCellName: Name of the cell to read
+      // Return value:
+      // 	string:  Content of the cell
+      //// Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Cell_Read(sCellName <useful> )
+      
+      RESULT “”
+     type : 458752
+   -
+     name : Cell_Font
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101713698
+     type_code : 12
+     code : |1+
+      // Summary: Modifies the font for a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Font ( [<sRangeOfCells> [, <sFontName> [, <nSize> [, <bBold> [, <bItalic> [, <bUnderlined> [, <nTextColor> [, <nBackgroundColor>]]]]]]]])
+      //
+      // Parameters:
+      //	sRangeOfCells: Range of cells to modify
+      //	sFontName: Name of the font to apply
+      // 	nSize: size of the font to apply
+      //	bBold (default value=-1): Bold
+      //	bItalic (default value=-1): Italic
+      //	bUnderlined (default value=-1): Underlined
+      //	nTextColor (default value=-1): Color of the text
+      //	nBackgroundColor (default value=-1): Background color for the cells
+      // Return value:
+      // 	boolean:   True if the font is applied, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Font(sCellRange <useful> =“”, sFontName <useful> =“”, nSize <useful> =0, bBold <useful> =-1, bItalic <useful> =-1, bUnderline <useful> =-1, nTextColor <useful> =-1, nBackgroundColor <useful> =-1)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Write
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101779234
+     type_code : 12
+     code : |1+
+      // Summary: Writes a value into a cell
+      // Syntax:
+      //[ <Result> = ] Cell_Write (<sCellName>, <sValue>)
+      //
+      // Parameters:
+      //	sCellName: Name of the cell
+      //	sValue: Name of the value
+      // Return value:
+      // 	boolean:  True if the value was written, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Write(sCellName <useful> , sValue <useful> )
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_HorizontalAlignment
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101844770
+     type_code : 12
+     code : |1+
+      // Sumary: Aligns the content of a cell or range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_HorizontalAlignment ([<sRangeOfCells> [, <nAlignment>]])
+      //
+      // Parameters:
+      //	sRangeOfCells: Range of cells to align
+      //	nAlignment (default value=1): Alignment to apply (see the constants)
+      // Return value:
+      // 	boolean:  True if the alignment is effective, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_HorizontalAlignment(sCellRange <useful> =“”, nAlignment <useful> =::cnAlignH_Left)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_VerticalAlignment
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101910306
+     type_code : 12
+     code : |1+
+      // Sumary: Aligns the content of a cell or range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_VerticalAlignment ([<sRangeOfCells> [, <nAlignment>]])
+      //
+      // Parameters:
+      //	sRangeOfCells: Range of cells to align
+      //	nAlignment (default value=1): Alignment to apply (see the constants)
+      // Return value:
+      // 	boolean: True if the alignment is effective, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_VerticalAlignment(sCellRange <useful> =“”, nAlignment <useful> =::cnAlignV_Top)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Print
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652101975842
+     type_code : 12
+     code : |1+
+      // Summary: Prints the current document
+      // Syntax:
+      //[ <Result> = ] Print ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the document is printed, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Print()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Delete
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102041378
+     type_code : 12
+     code : |1-
+      // Summary: Deletes a row
+      // Syntax:
+      //[ <Result> = ] Row_Delete ([<nSubscript>])
+      //
+      // Parameters:
+      //	nSubscript (default value=""): Subscript of the row to delete
+      // Return value:
+      // 	boolean:  True if the row was deleted, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Delete(nSubscript <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Delete
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102106914
+     type_code : 12
+     code : |1-
+      // Summary: Deletes a column
+      // Syntax:
+      //[ <Result> = ] Column_Delete ( [<sColumn>])
+      //
+      // Parameters:
+      //	sColumn (default value=""): Name of the column to delete
+      // Return value:
+      // 	boolean:   True if the column was deleted, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Delete(sColumn <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Name
+     internal_properties : CAAAAAgAAABOYCDJwxHSd/lgjfd23paR5rEwhbLJBAVjnjGpCcxcoo2q7RQBu6XgBnWnurQrwR4Wv20vWgRUn65vWA/gaCZAlOuI2Vn0tZSuECIaI+Rka6jrk6ElRNgozgH/49IhMNjyLTGCzOXftrfwOPwMExlyPnFPU/urtQ/2M57jXQFiGAEaEJOSWnOd0ETO
+     procedure_id : 1219711652102172450
+     type_code : 12
+     code : |1-
+      // Summary: Retrieves the name of the worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Name ( [<nSubscript>])
+      //
+      // Parameters:
+      //	nSubscript (default value=1): Subscript of the worksheet
+      // Return value:
+      // 	string:    Name of the worksheet
+      //// Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Worksheet_Name(nSubscript <useful> =1)
+      
+      RESULT “”
+     type : 458752
+   -
+     name : Column_Sort
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102237986
+     type_code : 12
+     code : |1-
+      // Summary: Sorts a column
+      // Syntax:
+      //[ <Result> = ] Column_Sort ([<sColumn> [, <sOrder>]])
+      //
+      // Parameters:
+      //	sColumn (default value="A"): Name of the column
+      //	sOrder (default value="ASC"): Sort order (ASC/DESC)
+      // Return value:
+      // 	boolean:  True if the sort is effective, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Sort(sColumn <useful> =“A”, sOrder <useful> =“ASC”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Cut
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102303522
+     type_code : 12
+     code : |1-
+      // Summary: Cuts the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Cut ([<sCellRange>])
+      //
+      // Parameters:
+      //	sCellRange (default value=""): Range of cells
+      // Return value:
+      // 	boolean:   True if the content is cut, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Cut(sCellRange <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Copy
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102369058
+     type_code : 12
+     code : |1-
+      // Summary: Copies the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Copy ([<sCellRange>])
+      //
+      // Parameters:
+      //	sCellRange (default value=""): Range of cells
+      // Return value:
+      // 	boolean:  True if the content is copied, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Copy(sCellRange <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Paste
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102434594
+     type_code : 12
+     code : |1-
+      // Summary: Paste the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Paste ([<sCellRange>])
+      //
+      // Parameters:
+      //	sCellRange (default value=""): Range of cells
+      // Return value:
+      // 	boolean:  True if the content is pasted, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Paste(sCellRange <useful> = “”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Merge
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1219711652102500130
+     type_code : 12
+     code : |1-
+      // Summary: Merges the selected range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Merge ( [<sRange>])
+      //
+      // Parameters:
+      //	sRange: Range of cells to merge
+      // Return value:
+      // 	boolean:  True if the merge is effective, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Merge(sRange <useful> =“”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Occurrence
+     internal_properties : CAAAAAgAAAD/xn8CHAC2d3BMexVl2s2wGHvf5HSjJVSXtQYifXYx+IdzWiephWCeVNM3KMTFNXDNPZ/RBG35KiOkPvrb/KpdIT0Za3zEGduyAVBo5a+lp2cM21lxjGylcJZDeQw4rRazqAf2TPdJUTN5VHDsRroWB6bl8SVPFThN/YCjdX3xxJSFOK2Op7I91w==
+     procedure_id : 1219711652102565666
+     type_code : 12
+     code : |1-
+      // Summary: Returns the number of worksheets found in the workbook
+      // Syntax:
+      //[ <Result> = ] Worksheet_Occurrence ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	integer:  Number of worksheets
+      // Automatic process of errors: RESULT 0
+      //
+      
+      Procedure VIRTUAL Worksheet_Occurrence()
+      
+      RESULT 0
+     type : 458752
+   -
+     name : Worksheet_Exist
+     internal_properties : CAAAAAgAAABOYCDJwxHSd/lgjfd23paR5rEwhbLJBAVjnjGpCcxcoo2q7RQBu6XgBnWnurQrwR4Wv20vWgRUn65vWA/gaCZAlOuI2Vn0tZSuECIaI+Rka6jrk6ElRNgozgH/49IhMNjyLTGCzOXftrfwOPwMExlyPnFPU/urtQ/2M57jXQFiGAEaEJOSWnOd0ETO
+     procedure_id : 1219711652102631202
+     type_code : 12
+     code : |1-
+      // Summary: Checks the existence of the worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_Exist (<psWorksheetName>)
+      //
+      // Parameters:
+      //	psWorksheetName: Name of the worksheet
+      // Return value:
+      // 	boolean:     True if the worksheet exists, False otherwise
+      //// Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Worksheet_Exist(psLeafName <useful>)
+      
+      RESULT False
+     type : 458752
+   -
+     name : Worksheet_SelectBySubscript
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102696738
+     type_code : 12
+     code : |1-
+      // Summary: Selects a worksheet by a subscript
+      // Syntax:
+      //[ <Result> = ] Worksheet_SelectBySubscript (<nSubscript)
+      //
+      // Parameters:
+      //	nSubscript: Subscript of the worksheet to select
+      // Return value:
+      // 	boolean:   True if the worksheet is selected, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_SelectBySubscript(nSubscript <useful> )
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Type
+     procedure_id : 1219711652102762274
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_Type (<psCell>)
+      // Returns the type of a cell (empty, value, text, formula)
+      // Parameters:
+      //	psCell: Cell to interrogate
+      // Return value:
+      // 	string:                 one of the following values:
+      // 0: EMPTY
+      // 1: VALUE
+      // 2: TEXT
+      // 3: FORMULA
+      Procedure VIRTUAL Cell_Type(psCell <useful> )
+      
+      RESULT “”
+     type : 458752
+   -
+     name : PrintPreview
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102827810
+     type_code : 12
+     code : |1+
+      // Summary: Starts the print preview
+      // Syntax:
+      //[ <Result> = ] PrintPreview ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:  True if the print preview is started, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL PrintPreview()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_AddSelection
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102893346
+     type_code : 12
+     code : |1+
+      // Summary: Adds a selected worksheet
+      // Syntax:
+      //[ <Result> = ] Worksheet_AddSelection (<nSubscript>)
+      //
+      // Parameters:
+      //	nSubscript: Subscript of the worksheet
+      // Return value:
+      // 	boolean:     True if the worksheet was selected, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_AddSelection(nSubscript <useful> )
+      
+      RESULT True
+     type : 458752
+   -
+     name : _bDetection
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652102958882
+     type_code : 12
+     code : |1-
+      // Summary: Indicates whether OOCalc is found on the current computer
+      // Syntax:
+      //[ <Result> = ] _bDetection ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the process is successful
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL _bDetection()
+      
+      // Local variables
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Format
+     procedure_id : 1219711652103024418
+     type_code : 12
+     code : |1-
+      // Summary: Formats a cell
+      // Syntax:
+      //[ <Result> = ] Cell_Format (<sCellFormat> [, <sRange>])
+      //
+      // Parameters:
+      //	sCellFormat: Format of the cell (NUMBER, DATE, TIME, CURRENCY, PERCENTAGE)
+      //	sRange: Range of cells
+      // Return value:
+      // 	boolean:  True if the process is successful
+      //
+      Procedure VIRTUAL Cell_Format(sCellFormat <useful> , sRange <useful> =“”)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Border
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711652103089954
+     type_code : 12
+     code : |1-
+      // Summary: Used to define the borders for a cell or range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Border ( [<sRange> [, <nBorder> [, <nThickness> [, <nColor>]]]])
+      //
+      // Parameters:
+      //	sRange (default value=""): Range of cells
+      //	nBorder (default value=1): Number of sides for the border (all by default)
+      //	nThickness (default value=1): Thickness that will be used for the border (average thickness by default)
+      //	nColor (default value=0): Color of the border (black by default)
+      // Return value:
+      // 	boolean:    True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Border(sRange <useful> =“”, nBorder <useful> = ::cnAllBorders, nThickness <utile> =1, nColor <useful> =0)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_DrawLine
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1219711652103155490
+     type_code : 12
+     code : |1-
+      // Summary: Draws an object in the worksheet specified in parameter
+      // Syntax:
+      //[ <Result> = ] Worksheet_DrawLine (<X1>, <Y1>, <X2>, <Y2> [, <nThickness> [, <nColor> [, <sWorksheetName>]]])
+      //
+      // Parameters:
+      //	X1: X coordinate of the source point
+      //	Y1: Y-coordinate of the source point
+      //	X2: X coordinate of the destination point
+      //	Y2: Y-coordinate of the destination point
+      //	nThickness (default value=1): Thickness of the line
+      //	nColor (default value=0): Color of the line
+      //	sWorksheetName: Name of the worksheet where the line must be drawn
+      // Return value:
+      // 	boolean:   True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_DrawLine(X1 <useful> , Y1 <useful> , X2 <useful> , Y2 <useful> , nThickness <useful> = 1 , nColor <useful>  = 0, sLeafName <useful> =“”)
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Pattern
+     internal_properties : CAAAAAgAAACEuov7VQHgCxlgWYDc+1g1C0h+wKe7Jr6qA4wXCWvNMU3Be1WGqpN27YZNHCXRFgh1taDoYFca/H1hK/T2BoqKYM7y/tQNFW7cgasPvDEpLaHN4/LBGIQ+fB7wByxGn71ZGWG8aBD/xIXpd/7FUy+OvLXROvlIA60EX6FmnKdAGWSpnWDHZ4YkhoqE
+     procedure_id : 1219711652103221026
+     type_code : 12
+     code : |1-
+      // Summary: Used to modify the style of pattern for a cell or for a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Pattern ([<sRange> [, <nPatternStyle> [, <nColor>]]])
+      //
+      // Parameters:
+      //	sRange: range of cells to select
+      //	nPatternStyle (default value=13): style of the requested pattern
+      //	nColor: Color of the patterns to apply
+      // Return value:
+      // 	boolean:  True if the process is successful
+      
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Pattern(sRange <useful> =“”, nPatternStyle <useful> =::cnBottomDiagonalPattern, nColor <utile> =RGB(60,60,60))
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : GetSpreadsheetName
+     procedure_id : 1219711652103286562
+     type_code : 12
+     code : |1-
+      // Summary: Returns the name of the spreadsheet
+      // Syntax:
+      //[ <Result> = ] GetSpreadsheetName ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	string:  Name of the spreadsheet
+      //
+      Procedure GetSpreadsheetName()
+      
+      
+      // Returns the name of the spreadsheet
+      RESULT :m_sSpreadsheetName
+     type : 458752
+   -
+     name : IsOpened
+     procedure_id : 1219711652103352098
+     type_code : 12
+     code : |1+
+      // Syntax:
+      //[ <Result> = ] IsOpened ()
+      // Used to check whether the workbook is still opened
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:      True if the workbook is opened
+      
+      Procedure VIRTUAL IsOpened()
+      
+      RESULT True
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+  original_name : CClasse1
+resources :
+ string_res :
+  identifier : 0x175551850012214b
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ

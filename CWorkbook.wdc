@@ -1,0 +1,2228 @@
+#To edit and compare internal_properties, use WINDEV integrated tools.
+#Internal properties refer to the properties of controls in windows, reports, etc.
+info :
+ name : CWorkbook
+ major_version : 28
+ minor_version : 0
+ type : 4
+ description : ""
+ subtype : 0
+class :
+ identifier : 0x10ed494807796b6a
+ internal_properties : CAAAAAgAAAB2/vstTMCJbS/hlxjFxirSqKvCUuv8YxgpWyl7S3iA
+ code_elements :
+  internal_properties : CAAAAAgAAABm4PVFe9JAHaoZ7pWrapr167xJBrSdz0axAnnnfYhOQaaZf6aFmw+87+hdnze0968KI3y7g0wMbri74fT3L3UE/39pGg==
+  type_code : 10
+  p_codes :
+   -
+     code : |1-
+      // CWorkbook has the same characteristics as the base class (COpenOffice)
+      CWorkbook is Class
+      	inhérits of CSpreadsheet
+      	
+      	
+      	oServiceManager 		is object OLE dynamic
+      	oDesktop 				is object OLE dynamic
+      	oDocument 				is object OLE dynamic		
+      	oWorksheet 				is object OLE dynamic
+      	oCellRange 			is object OLE dynamic
+      	
+      	m_nArrSelectedWorksheets is array of 0 int	// List the names of the selected worksheets
+      	
+      	CONSTANT 
+      	
+      	// Format
+      	cst_Number_Format 		= 0
+      	cst_Date_Format 		= 30
+      	cst_Time_Format		= 41
+      	cst_Percentage_Format	= 11
+      	cst_Currency_Format	= 106
+      	cst_Scientific_Format	= 60
+      	cst_Fraction_Format		= 70
+      	cst_Text_Format		= 100
+      	
+      	// Style of fill (for the patterns)
+      	cnFillStyleNone 		= 0
+      	cnFillStyleSolid 		= 1
+      	cnFillStyleGradient 		= 2
+      	cnFillStyleHatch 		= 3
+      	
+      	cnFillStyle_Simple 		= 0
+      	cnFillStyle_Double 		= 1
+      	cnFillStyle_Triple 		= 2
+      	
+      END
+      END
+     type : 131072
+   -
+     code : |1-
+      
+     type : 131074
+  procedures :
+   -
+     name : Constructor
+     procedure_id : 1219711647799208810
+     type_code : 27
+     code : |1-
+      Procedure Constructor()
+      
+      // Name of the spreadsheet
+      :m_sSpreadsheetName = CChooseSpreadsheet::csProduct_OOCalc
+     type : 589824
+   -
+     name : Destructor
+     procedure_id : 1219711647799274346
+     type_code : 28
+     code : |1+
+      Procedure Destructor()
+     type : 655360
+   -
+     name : Create
+     internal_properties : CAAAAAgAAACdfsZaA7fo98iPYGG+p5RwyyPfUWRGH4SkhxOQR/ADQlkQ6q21NTkshF/CkP8TwsE/RbX/5anzJa2ZrWRbSsKP+4oPLNdtASMjVmyJK2sctXPTThe9Ea3Po5E4jXWgFToEZHg1jDznDxFdTMoCzmOSyx1ABAuVWacn6Qua2FAOgEG2A5EteKTWIpUzcHce8rZ5TGqzKsYNCjlzxNlrlv54iQ==
+     procedure_id : 1219711647799339882
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Create ()
+      // Create a new workbook
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the creation is effective, False otherwise             
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Create()
+      
+      // Local variables
+      mNoArgs 		is array of 0 variant
+      
+      
+      // Service manager required by OpenOffice
+      :_StartService()
+      
+      // Create a new workbook
+      :oDocument 	= :oDesktop>>LoadComponentFromURL(“private:factory/scalc”, “_blank”, 0, mNoArgs)
+      
+      // Retrieve the active worksheet
+      :oWorksheet 	= :oDocument>>CurrentController>>ActiveSheet
+      
+      // The A1 cell is selected by default
+      :Cell_Select(“A1”)
+      
+      // The creation is effective
+      RESULT True
+     type : 458752
+   -
+     name : OpenWorkbook
+     internal_properties : CAAAAAgAAAAGX/8j/OI+aFwYRwi6M7VTsY+wNr5TKIbHqFQlNikOfGvmFKKej3eNjHP4D7oVxgBZzIIx/WzEbW17JoQhYfnbODRPzS/8/0OnFAFpuD8DNaZhFxZEI10R6zVcJd1IjXIuTlLxiJgbWUdbCqoyhgs+PY+ioqkHw4kz472uBIR6XL0287PH9jZIrJnvJj0i5lqNWP4rom79gKUheY7EIxsI6UlyjYK77Xt0Y3LggqfFV/Y=
+     procedure_id : 1219711647799405418
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] OpenWorkbook ()
+      // Opens an existing workbook
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:   True if the document is opened, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL OpenWorkbook()
+      
+      // Local variables
+      mNoArgs 			is array of 0 variant
+      sFormattedPath 		is string
+      sWorkSheet 			is string
+      
+      
+      // Service manager required by OpenOffice
+      :_StartService()
+      
+      // Choose the workbook to open
+      sWorkSheet = fSelect(“”, “”, “Select a workbook...”,  “OpenDocument workbook (*.ods)”+TAB+“*.ods” +CR+ “Openoffice.org Workbook (*.sxc)”+TAB+“*.sxc”+CR+“Openoffice.org Workbook Model (*.stc)”+TAB+“*.stc”+CR+“Microsoft Excel (*.xls)”+TAB+“*.xls”+CR+“Microsoft Excel 2007 (*.xlsx)”+TAB+“*.xlsx”+CR+“Microsoft Excel Model (*.xlt)”+TAB+“*.xlt”+CR+“StarCalc (*.sdc)”+TAB+“*.sdc”+CR+“StarCalc Template (*.vor)”+TAB+“*.vor”+CR+“All files (*.*)”+TAB+“*.*”, “*.ods”, fselOpen+fselExist)
+      
+      // Does the file exist?
+      IF fFileExist(sWorkSheet) THEN
+      	
+      	// Format the path of the file
+      	sFormattedPath 	= “file:///” + Replace(sWorkSheet,“\”,“/”)
+      	
+      	// Open the file in Open Office
+      	:oDocument 		= :oDesktop>>LoadComponentFromURL(sFormattedPath, “_blank”, 0, mNoArgs)
+      	
+      	// If the object is not Null
+      	IF :oDocument <> Null THEN
+      		// Active worksheet
+      		:oWorksheet 		= :oDocument>>CurrentController>>ActiveSheet
+      		// Selected cells
+      		:oCellRange = :oDocument>>CurrentSelection
+      		RESULT True
+      	END
+      END
+      
+      // The opening cannot be performed
+      RESULT False
+     type : 458752
+   -
+     name : Worksheet_Select
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647799470954
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Select (<psWorksheetName>)
+      // Select a worksheet from its name
+      // Parameters:
+      //	psWorksheetName: Name of the worksheet to select
+      // Return value:
+      // 	boolean:      True if the worksheet is selected, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Select(psLeafName)
+      
+      // Local variables
+      nSubscript			is int
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // If the worksheet exists
+      IF psLeafName<>“” _AND_ :Worksheet_Exist(psLeafName) THEN
+      	// Select the specified worksheet
+      	:oWorksheet = :oDocument>>Sheets>>getByName(psLeafName)
+      	// Display
+      	:oDocument>>CurrentController>>ActiveSheet = :oWorksheet
+      	// Browse the worksheets of the document
+      	nNbWorksheets is int = :Worksheet_Occurrence()
+      	FOR i = 1 TO nNbWorksheets
+      		IF :Worksheet_Name(i) = psLeafName THEN 
+      			// Stores the subscript
+      			nSubscript = i-1 // OOCalc counts from 0
+      			BREAK
+      		END
+      	END
+      	// Clears the array of selected worksheets
+      	ArrayDeleteAll(:m_nArrSelectedWorksheets)
+      	// Adds the subscript of this worksheet
+      	ArrayAdd(:m_nArrSelectedWorksheets,nSubscript)
+      	
+      	// The worksheet was selected
+      	RESULT True
+      	
+      END
+      
+      // The worksheet was not selected
+      RESULT False
+     type : 458752
+   -
+     name : Cell_Write
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647799536490
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_Write (<psCell>, <psValue>)
+      // Write the specified content into the specified cell
+      // Parameters:
+      //	psCell: Row where the write operation will be performed
+      //	psValue: Value to write (numeric, string or formula)
+      // Return value:
+      // 	boolean:   True if the value was positioned in the cell, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Write(psCell, psValue)
+      
+      // Local variables
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // No action if it's not the address of a cell
+      IF MatchRegularExpression(psCell, “[a-zA-Z]+[0-9]+”)=False THEN
+      	RESULT False
+      END
+      
+      // Is it a numeric?
+      IF IsNumeric(psValue) THEN
+      	// Write the specified value into the specified cell
+      	:oWorksheet>>getCellRangeByName(psCell)>>Value = psValue
+      ELSE
+      	// Is it a formula?
+      	IF Left(psValue,1)=“=” THEN
+      		// Write the specified formula into the specified cell
+      		:oWorksheet>>getCellRangeByName(psCell)>>Formula = psValue+“ ”
+      		:oDocument>>calculateAll()
+      	ELSE
+      		// Write the specified text into the specified cell
+      		:oWorksheet>>getCellRangeByName(psCell)>>String = psValue
+      	END
+      END
+      
+      // The write operation is effective in the cell
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Read
+     procedure_id : 1219711647799602026
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_Read (<psCell>)
+      // Interrogates the content of a cell
+      // Parameters:
+      //	psCell: Cell to interrogate
+      // Return value:
+      // 	Undefined type:   Value read
+      
+      Procedure VIRTUAL Cell_Read(psCell)
+      
+      // Local variables
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // No action if it's not the address of a cell
+      IF MatchRegularExpression(psCell, “[a-zA-Z]+[0-9]+”)=False THEN
+      	RESULT “”
+      END
+      
+      // According to the type of cell
+      SWITCH :Cell_Type(psCell)
+      	// VALUE
+      	CASE “VALUE”	 : 	RESULT :oWorksheet>>getCellRangeByName(psCell)>>Value
+      	// TEXT
+      	CASE “TEXT”	: 	RESULT :oWorksheet>>getCellRangeByName(psCell)>>String
+      	// FORMULA
+      	CASE “FORMULA” :	RESULT :oWorksheet>>getCellRangeByName(psCell)>>FormulaLocal
+      	// UNKNOWN TYPE
+      	OTHER CASE : 	RESULT “”
+      		
+      END
+     type : 458752
+   -
+     name : Cell_Font
+     procedure_id : 1219711647799667562
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_Font ( [<psRange> [, <psFont> [, <pnSize> [, <pbBold> [, <pbItalic> [, <pbUnderlined> [, <pnTextColor> [, <pnBackgroundColor>]]]]]]]])
+      // Modify the font of the cells found in the selected range
+      // Parameters:
+      //	psRange: Range of cells
+      //	psFont: Font to apply
+      //	pnSize (default value=-1): Size of the font to apply
+      //	pbBold (default value=-1): Bold
+      //	pbItalic (default value=-1): Italic (property not available by OLE controlling)
+      //	pbUnderlined (default value=-1): Underlined
+      //	pnTextColor (default value=-1): Color of the text
+      //	pnBackgroundColor (default value=-1): Background color
+      // Return value:
+      // 	boolean:   True if the font was modified, False otherwise
+      
+      Procedure VIRTUAL Cell_Font(psRange=“”,psFont=“”, pnSize=-1, pbBold=-1, pbItalic <useful> =-1, pbUNDERLINE=-1, pnTextColor=-1, pnBackgroundColor=-1)
+      
+      // Local variables
+      nBGRColor 		is int
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF psRange<>“” THEN
+      	:Cell_Select(psRange)
+      END
+      
+      // Font
+      IF psFont<>“” THEN
+      	:oCellRange>>CharFontName = psFont
+      END
+      
+      // Size
+      IF pnSize<>-1 THEN
+      	:oCellRange>>CharHeight = Max(Val(pnSize),2)
+      END
+      
+      // Bold
+      IF pbBold<>-1 THEN
+      	IF pbBold THEN
+      		:oCellRange>>CharWeight = 150
+      	ELSE
+      		:oCellRange>>CharWeight = 0
+      	END
+      END
+      
+      // Underlined
+      IF pbUNDERLINE<>-1 THEN
+      	IF pbUNDERLINE THEN
+      		:oCellRange>>CharUnderline = 1
+      	ELSE
+      		:oCellRange>>CharUnderline = 0
+      	END
+      END
+      
+      // Color
+      IF pnTextColor<>-1 THEN
+      	
+      	
+      	nBGRColor = :_ColorConversion(pnTextColor)
+      	
+      	:oCellRange>>CharColor = nBGRColor	
+      END
+      
+      // Background color
+      IF pnBackgroundColor<>-1 THEN
+      	
+      	// Convert from RGB to BGR
+      	nBGRColor = :_ColorConversion(pnBackgroundColor)
+      	
+      	:oCellRange>>CellBackColor = nBGRColor
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_VerticalAlignment
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647799733098
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_VerticalAlignment ( [<sRange> [, <pnAlignment>]])
+      // Specifies the vertical alignment for the selected cells
+      // Parameters:
+      //	sRange: Range to align
+      //	pnAlignment (default value=2): 1->at the top, 2->center, 3->at the bottom
+      // Return value:
+      // 	boolean: True if the alignment is effective, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_VerticalAlignment(sRange=“”,pnAlignment=::cnAlignV_Center)
+      
+      // Local variables
+      nAlignment is int = pnAlignment
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // If the alignment is correct
+      IF nAlignment IN (::cnAlignV_Bottom,::cnAlignV_Center,::cnAlignV_Top) THEN
+      	// Specifies the vertical alignment of the cells found in the selected range
+      	:oCellRange>>VertJustify = nAlignment
+      	RESULT True
+      END
+      
+      // The alignment cannot be performed
+      RESULT False
+     type : 458752
+   -
+     name : Cell_HorizontalAlignment
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647799798634
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_HorizontalAlignment ( [<sRange> [, <pnAlignment>]])
+      // Specifies the horizontal alignment for the selected cells
+      // Parameters:
+      //	sRange: Range to align
+      //	pnAlignment (default value=1): cnAlignH_Left, cnAlignH_Center, cnAlignH_Right
+      // Return value:
+      // 	boolean: True if the alignment is effective, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_HorizontalAlignment(sRange=“”,pnAlignment=::cnAlignH_Left)
+      
+      // Local variables
+      nAlignment is int = pnAlignment
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // If the alignment is correct
+      IF nAlignment IN (::cnAlignH_Left,::cnAlignH_Center,::cnAlignH_Right) THEN
+      	// Specifies the horizontal alignment of the cells found in the selected range
+      	:oCellRange>>HoriJustify = nAlignment
+      	RESULT True
+      END
+      
+      // The alignment cannot be performed
+      RESULT False
+     type : 458752
+   -
+     name : Column_Width
+     internal_properties : CAAAAAgAAAApHRjbssGW6SRCY4GMpX22O6EHbtKRJofk6+G6lbCeJkH69GUBl5dG+jK95GYwKNwYK35nw5fEGSO5vWIQgF9LStsvH1aJoTF6baNVWSQkJNk8gdKAaYO0MHr5R3/1yhk2BFWFSVs41CwzMbDEmaim/3l1oIW7oYu81YF3qU3zlasBkb+X0SG/s7T1lZWpnrGZ7IP2YqOmMTh7DjbWAsjJ2SrITWHCWlQTDWmZxiXSX7Ztk+wxF3r+yZB/3jolIGCWcmww3CegoQ==
+     procedure_id : 1219711647799864170
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Column_Width ([<sColumn> [, <nWidth>]])
+      // Modify the width of the specified column
+      // Parameters:
+      //	sColumn: Subscript of the column to resize
+      //	nWidth (default value=-1): New width in 1/100 of mm (don't specify anything to apply an optimum width)
+      // Return value:
+      // 	boolean:   True if the width was modified, False otherwise
+      
+      Procedure VIRTUAL Column_Width(sColumn=“”, nWidth=-1)
+      
+      // Local variables
+      pautDispatcher 		is object OLE dynamic
+      pautFrame			is object OLE dynamic
+      arrProperty 		is array of 1 object Automation dynamic
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Column to select
+      IF sColumn <> “” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Width of the specified column
+      IF nWidth=-1 THEN
+      	
+      	// Defines the "Width" property
+      	arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	arrProperty[1]>>Name 	= “aExtraWidth”
+      	arrProperty[1]>>Value 	= 200
+      	
+      	// Insertion by the dispatcher
+      	pautDispatcher>>executeDispatch(pautFrame, “.uno:SetOptimalColumnWidth”, “”, 0, arrProperty )
+      	
+      ELSE
+      	// Defines the "Width" property
+      	arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	arrProperty[1]>>Name 	= “ColumnWidth”
+      	arrProperty[1]>>Value 	= nWidth*100
+      	
+      	// Insertion by the dispatcher
+      	pautDispatcher>>executeDispatch(pautFrame, “.uno:ColumnWidth”, “”, 0, arrProperty )
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Height
+     internal_properties : CAAAAAgAAAB6TIrQ+tbL8GKXOKioaJLvoOCNCDv1/fxtDPpnr7FcAGxhXdpSlcff+4lPSEWq6PLZRFQ9W/C18wb87/pN4Ig6p6mFAVSBiM0pQspCgL+zyQs9dGQXFp5uXa5XIFuiS2G+wEiufl9WPteupyMKxHRAmLOgQ5SFmfNNltcwS8gxmSFwlx8X+mORdziovGp7jET/Q/LrWw==
+     procedure_id : 1219711647799929706
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Row_Height ([<pnRow> [, <pnHeight>]])
+      // Modify the height of the specified row
+      // Parameters:
+      //	pnRow (default value=""): Subscript of the row to resize
+      //	pnHeight (default value=-1): New height in 1/100 of mm (don't specify anything to apply an optimum height)
+      // Return value:
+      // 	boolean:  True if the height was modified, False otherwise
+      
+      Procedure VIRTUAL Row_Height(pnLine = 0, pnHeight=-1)
+      
+      // Local variables
+      nRow 			is int = Max(pnLine,1)
+      nHeight 		is int = pnHeight
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Width of the specified column
+      IF nHeight=-1 THEN
+      	:oWorksheet>>getRows>>getByIndex(nRow-1)>>OptimalHeight = True
+      ELSE
+      	nHeight = Max(0,pnHeight)
+      	:oWorksheet>>getRows>>getByIndex(nRow-1)>>Height = nHeight*100
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Select
+     procedure_id : 1219711647799995242
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_Select (<sCells>)
+      //
+      // Parameters:
+      //	sCells: Cell(s) to select
+      // Return value:
+      // 	boolean:    True if the cell was selected, False otherwise
+      
+      Procedure VIRTUAL Cell_Select(sCells)
+      
+      // Local variables
+      bRangeOK			is boolean = False
+      sCell, sLine1, sLine2, sColumn1, sColumn2, sCh are strings
+      i 					is int
+      nBound				is int
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      sRange  is string = sCells
+      
+      // if A1 is received, it is changed into A1:A1
+      IF Position(sRange,“:”)=0 THEN
+      	sRange = sRange+“:”+sRange
+      END
+      
+      // first cell
+      sCell = ExtractString(sRange,1,“:”)
+      nBound = Length(sCell)
+      FOR i=1 TO nBound
+      	sCh = sCell[[i]] 
+      	IF NumToString(Val(sCh))~=sCh THEN
+      		sLine1 += sCh
+      	ELSE
+      		sColumn1 += sCh
+      	END
+      END
+      
+      // second cell
+      sCell = ExtractString(sRange,2,“:”)
+      nBound = Length(sCell)
+      FOR i=1 TO nBound
+      	sCh = sCell[[i]] 
+      	IF NumToString(Val(sCh))~=sCh THEN
+      		sLine2 += sCh
+      	ELSE         
+      		sColumn2 += sCh
+      	END
+      END
+      
+      
+      // if it's a range of rows
+      IF (sColumn1~=“” AND sColumn2~=“”) THEN
+      	// Select the range of cells
+      	:oCellRange = :oWorksheet>>getCellRangeByName(“A”+sLine1+“:”+“A”+sLine2)
+      	bRangeOK = True
+      END
+      
+      // if it's a range of columns
+      IF (sLine1~=“” AND sLine2~=“”) THEN
+      	// Select the range of cells
+      	:oCellRange = :oWorksheet>>getCellRangeByName(sColumn1+“1”+“:”+sColumn2+“1”)
+      	bRangeOK = True
+      END
+      
+      // if it's a range of cells
+      IF (sLine1<>“” AND sLine2<>“” AND sColumn1<>“” AND sColumn2<>“”) THEN
+      	// Select the range of cells
+      	:oCellRange = :oWorksheet>>getCellRangeByName(sColumn1+sLine1+“:”+sColumn2+sLine2)
+      	bRangeOK = True
+      END
+      
+      IF bRangeOK  THEN
+      	// Display
+      	:oDocument>>CurrentController>>Select(:oCellRange)	
+      ELSE
+      	Error(“The specified range is incorrect”)
+      	RESULT False
+      END
+      
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Add
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647800060778
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Add (<psWorksheetName> [, <pnSubscript>])
+      // Add a worksheet to a workbook
+      // Parameters:
+      //	psWorksheetName: Name of the worksheet
+      //	pnSubscript (default value=1): Position of the worksheet in relation to the existing worksheets
+      // Return value:
+      // 	boolean:  True if the worksheet was added, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Add(psLeafName, pnSubscript=:Worksheet_Occurrence()) <redéfinition>
+      
+      // Local variables
+      nSubscript 		is int = Max(pnSubscript,1)
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // If the worksheet does not already exist
+      IF :Worksheet_Exist(psLeafName)=False _AND_ psLeafName<>“” THEN
+      	// Add the worksheet
+      	:oDocument>>Sheets>>insertNewByName(psLeafName, pnSubscript-1)
+      	RESULT True
+      ELSE
+      	RESULT False
+      END
+     type : 458752
+   -
+     name : Worksheet_Delete
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647800126314
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Delete ([<psWorksheetName>])
+      // Delete a worksheet
+      // Parameters:
+      //	psWorksheetName (default value=""): Name of the worksheet to delete
+      // Return value:
+      // 	boolean:   True if the worksheet was deleted , False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Delete(psLeafName=“”)
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // If the worksheet exists
+      IF psLeafName<>“” _AND_ :Worksheet_Exist(psLeafName) THEN
+      	// A workbook must contain at least one worksheet	
+      	IF :Worksheet_Occurrence()>1 THEN
+      		// Delete the worksheet
+      		:oDocument>>Sheets>>removeByName(psLeafName)
+      		// Active worksheet
+      		:oWorksheet = :oDocument>>CurrentController>>ActiveSheet
+      		RESULT True
+      	END
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Worksheet_Rename
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647800191850
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Rename (<psWorksheetName>, <psNewName>)
+      // Renames a worksheet
+      // Parameters:
+      //	psWorksheetName: Name of the worksheet to modify
+      //	psNewName: New name that will be given to the worksheet
+      // Return value:
+      // 	boolean:      True if the worksheet was renamed, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Rename(psLeafName, psNewName)
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // empty names are not allowed for worksheets
+      IF psLeafName=“” _OR_ psNewName=“” THEN
+      	RESULT False
+      END
+      
+      // if the worksheet to modify is found
+      // and if the new name is not already used
+      IF :Worksheet_Exist(psLeafName)=True _AND_ :Worksheet_Exist(psNewName)=False THEN
+      	// Rename the worksheet
+      	:oDocument>>Sheets>>getByName(psLeafName)>>Name = psNewName
+      	RESULT True
+      ELSE
+      	RESULT False
+      END
+     type : 458752
+   -
+     name : Worksheet_Exist
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647800257386
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Exist (<psWorksheetName>)
+      // Checks the existence of a worksheet
+      // Parameters:
+      //	psWorksheetName: Name of the worksheet
+      // Return value:
+      // 	Undefined type:   True if the worksheet exists, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_Exist(psLeafName)
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF psLeafName<>“” THEN
+      	RESULT :oDocument>>Sheets>>hasByName(psLeafName)
+      ELSE
+      	RESULT False	
+      END
+     type : 458752
+   -
+     name : Column_Insert
+     internal_properties : CAAAAAgAAADPQIW3si1JbXZuEjZ7uS8f7a1NUwjLKu8mLm8GWZKYVQ99+RtqbQ7Od7Fhjmvym8ezpf9cWhgRb0r+y4/qNWWv15gMis1Vk93ubtDQYhLCtIrCaNZ7idPtxdP1mELVJUfXE+3jStD/4/fuvE0/1U2W456hToTP1Ok3vvFZef38xGvX/K+qxBPeyFbP1zjE+vztSHG3wZs8jUH6YVL7LH6pe/Wzd77omRb8g+1SbcQcf65D7kNj4h2iH3q7K9kccHKobVKYLZG+yBhCWcMsaw==
+     procedure_id : 1219711647800322922
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Column_Insert ([<sColumn>])
+      // Add a column at a specified location
+      // Parameters:
+      //	sColumn: Subscript of the column to add
+      // Return value:
+      // 	boolean:   True if the column was inserted, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Column_Insert(sColumn=“”)
+      
+      // Local variables
+      pautDispatcher 		is object OLE dynamic
+      pautFrame			is object OLE dynamic
+      arrProperty 		is array of 1 object Automation dynamic
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF sColumn <> “” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Defines the "Format" property
+      arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      arrProperty[1]>>Name 	= “Flags”
+      arrProperty[1]>>Value 	= sColumn
+      
+      // Insertion by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:InsertCell”, “”, 0, arrProperty )
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Insert
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647800388458
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Row_Insert (<pnPosition> [, <pnNumberRow>])
+      // Add a row at a specified location
+      // Parameters:
+      //	pnPosition: Subscript of the row to add
+      //	pnNumberRow (default value=1): Number of rows to add
+      // Return value:
+      // 	boolean:   True if the row was inserted, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Row_Insert(pnPosition, pnLineNumber=1) <redéfinition>
+      
+      // Local variables
+      nPosition 		is int = pnPosition
+      nLineNumber 	is int = Max(Val(pnLineNumber), 1)
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF pnPosition>=0 THEN
+      	WHEN EXCEPTION IN
+      		:oWorksheet>>getCellByPosition(1, nPosition-1)>>Rows>>insertByIndex(0, nLineNumber)
+      		RESULT True
+      	DO
+      	END
+      END
+      
+      RESULT False
+     type : 458752
+   -
+     name : Column_Delete
+     internal_properties : CAAAAAgAAAD8k6FP4gpvfPeQr2wOTgmWkYDBG9cJSNZLzjNs6YfY9nA6Jiad4BMZjqfAf3jHmbuNSoLWNBrdkMxlfJCwYiwwE17jmRZ4kkLNEvq/eyB5v97c2kkmSP94R7rCa+S4PAWxhIbNURfL4AGK6FRfCOPi6fumXqvBnBed8IrhxhK6bqO7UC0tm8WE5iXi3FIyb7g0gbIK3hPC7pLLuxSl+QOD9m5xBg==
+     procedure_id : 1219711647800453994
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Column_Delete ( [<sColumn>])
+      // Deletes the specified column
+      // Parameters:
+      //	sColumn: Subscript of the first column to delete
+      // Return value:
+      // 	boolean: True if the column was deleted
+      //
+      Procedure VIRTUAL Column_Delete(sColumn=“”)
+      
+      // Local variables
+      pautDispatcher 		is object OLE dynamic
+      pautFrame			is object OLE dynamic
+      arrmNoArgs 			is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF sColumn <> “” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      
+      // Insertion by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:DeleteColumns”, “”, 0, arrmNoArgs )
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Row_Delete
+     procedure_id : 1219711647800519530
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Row_Delete (<pnPosition> [, <pnNumberRow>])
+      // Deletes the specified row
+      // Parameters:
+      //	pnPosition: Subscript of the first row to delete
+      //	pnNumberRow (default value=1): Number of rows to delete
+      // Return value:
+      // 	boolean: True if the row is deleted, False otherwise
+      
+      Procedure VIRTUAL Row_Delete(pnPosition, pnLineNumber=1) <redéfinition>
+      
+      // Local variables
+      nPosition 			is int = pnPosition
+      nLineNumber 		is int = Max(pnLineNumber,1)
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF nPosition>=0 THEN
+      	:oWorksheet>>getCellByPosition(1, nPosition-1)>>Rows>>removeByIndex(0, nLineNumber)
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : Column_Mask
+     internal_properties : CAAAAAgAAADE6+kXOrIrtP/QZxzWJkk26UgxM1+BqLZL5hMkSfeALjAK/sYNkDuBBkeon7A/CSslYiI+bJK98PydXPhQAsQoQ37rmXYY2vp1AuIf85iZ/zaUroXanFsM+1bWB6C0SHEVqKoZJcuHVPWWfNCbBD9e/e+KGs9lOPvhXO4dEq42+qePpHlxzwGICnE2iB6+6zQ4ZYbG0mcOcnYX79BhMUtLPjZJPg==
+     procedure_id : 1219711647800585066
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Column_Mask ([<sColumn> [, <bMasked>]])
+      // Hides/Displays a column
+      // Parameters:
+      //	sColumn: subscript of the column to hide
+      //	bMasked (default value=0): True to mask
+      // Return value:
+      // 	boolean:  True if the column is masked, False otherwise
+      
+      Procedure VIRTUAL Column_Mask(sColumn=“”, bMask=False)
+      
+      // Local variables
+      pautDispatcher 	is object OLE dynamic
+      pautFrame		is object OLE dynamic
+      arrmNoArgs 		is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF sColumn <> “” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      
+      // Hides the column by the dispatcher
+      IF bMask THEN 
+      	pautDispatcher>>executeDispatch(pautFrame, “.uno:HideColumn”, “”, 0, arrmNoArgs )
+      ELSE
+      	pautDispatcher>>executeDispatch(pautFrame, “.uno:ShowColumn”, “”, 0, arrmNoArgs )	
+      END
+      
+      // The copy of the text is effective
+      RESULT True
+     type : 458752
+   -
+     name : Row_Hide
+     procedure_id : 1219711647800650602
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Row_Hide ([<pnRow> [, <pbIsHidden>]])
+      // Hides/Displays a row
+      // Parameters:
+      //	pnRow (default value=""): subscript of the row to hide
+      //	pbIsMasked (default value=0): Visibility of the row (True or False)
+      // Return value:
+      // 	boolean: True if the row is masked, False otherwise
+      
+      
+      Procedure VIRTUAL Row_Hide(pnLine = “”, pbIsMasked=False)
+      
+      // Local variables
+      bVisible 	is boolean = (NOT pbIsMasked)
+      nRow 		is int = pnLine
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF nRow>=0 THEN
+      	:oWorksheet>>getCellByPosition(1, nRow-1)>>Rows>>IsVisible = bVisible
+      END
+      
+      RESULT True
+     type : 458752
+   -
+     name : _ActiveObject
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647800716138
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] _ObjectEnabled ()
+      // Retrieves the active instance of OpenOffice
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:         True if an active instance was found
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure PRIVATE _ActiveObject()
+      
+      // Service manager required by OpenOffice
+      :_StartService()
+      
+      WHEN EXCEPTION IN
+      	// Active object
+      	:oDocument = :oDesktop>>getCurrentComponent()
+      	
+      	// Active worksheet
+      	:oWorksheet = :oDocument>>CurrentController>>ActiveSheet
+      	
+      	// Selected cells
+      	:oCellRange = :oDocument>>CurrentSelection
+      	
+      	RESULT True
+      	
+      DO
+      	// No workbook object was found
+      	RESULT False
+      END
+     type : 458752
+   -
+     name : Worksheet_Name
+     internal_properties : CAAAAAgAAABOYCDJwxHSd/lgjfd23paR5rEwhbLJBAVjnjGpCcxcoo2q7RQBu6XgBnWnurQrwR4Wv20vWgRUn65vWA/gaCZAlOuI2Vn0tZSuECIaI+Rka6jrk6ElRNgozgH/49IhMNjyLTGCzOXftrfwOPwMExlyPnFPU/urtQ/2M57jXQFiGAEaEJOSWnOd0ETO
+     procedure_id : 1219711647800781674
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Name ([<pnSubscript>])
+      // Returns the name of the specified worksheet
+      // Parameters:
+      //	pnSubscript (default value=0): Subscript of the worksheet to interrogate or empty to find out the name of the active worksheet
+      // Return value:
+      // 	string:    Name of the specified worksheet
+      // Automatic process of errors: RESULT ""
+      //
+      
+      Procedure VIRTUAL Worksheet_Name(pnSubscript=0)
+      
+      // Local variables
+      sLeafName 	is string
+      nWorksheetSubscript 	is  int
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT “”
+      
+      // Shield on the maximum subscript
+      nWorksheetSubscript = Max(Val(pnSubscript), :Worksheet_Occurrence())
+      
+      // Shield on minimum subscript
+      nWorksheetSubscript = Max(Val(pnSubscript), 1)
+      
+      IF pnSubscript=0 THEN
+      	// Name of the current worksheet
+      	sLeafName = :oDocument>>CurrentController>>ActiveSheet>>Name
+      ELSE
+      	// Name of the specified worksheet
+      	sLeafName = :oDocument>>Sheets>>getByIndex(nWorksheetSubscript-1)>>Name
+      END
+      
+      RESULT sLeafName
+     type : 458752
+   -
+     name : _StartService
+     internal_properties : CAAAAAgAAADQ/5WghtsNNiniZVaISD8cg+53x3Gm4JqRPFf23xEOjP48CC6BBI8VTL2McXKxI3VnKGAqlLq59LYv7MamdCIe3YRdcdqkbhpT4BrVoaL3PVzOz1ItQQS3tol/pOdF16KqPQ9irMyMG/y9df0CbYIDBpjHS6ZOLa40D3P21asRN+BoiWKg6BaXlXxDmQkLoTY0ub7Cssdy1nofB9xp1SRi0kJdKg==
+     procedure_id : 1219711647800847210
+     type_code : 12
+     code : |1+
+      // Syntax:
+      //_StartService ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	None
+      
+      Procedure PRIVATE _StartService()
+      
+      HourGlass(True)
+      
+      WHEN EXCEPTION IN
+      	// Create an OpenOffice service if necessary
+      	:oServiceManager = new object OLE (“com.sun.star.ServiceManager”)
+      	:oDesktop = :oServiceManager>>createInstance(“com.sun.star.frame.Desktop”)
+      DO
+      	EndProgram(“OpenOffice is not installed on your computer.”, “OpenOffice is required to operate this example.”)
+      END
+      
+      HourGlass(False)
+     type : 458752
+   -
+     name : Save
+     internal_properties : CAAAAAgAAACtPcslf5h5I2c88PKkdLNMagzLD3zMTIfjfUpHe0JJ5R5wEuB27EI6E48duyX0tCMNeZXtlICLo9SAD9bx4MnM+3DZ4ytWEIndI7tEqkimaQNozOY261V/nKs9+HXPM26Qk/Fw3Jxcc1RNjeeS/UJjaHIV8QYuD8hCKRM2CafNoWjSVTiYxPd2/eDdBP+FZmgED3ehIa+Z7Z2G1yDlWQtxUQKBMhAHAB5A9qiNX7n5eTnQADc=
+     procedure_id : 1219711647800912746
+     type_code : 12
+     code : |1+
+      // Syntax:
+      //[ <Result> = ] Save ()
+      // Save the current document
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:   True if the backup is effective, False otherwise
+      
+      Procedure VIRTUAL Save()
+      
+      
+      // Local variables
+      pautDispatcher 		is object OLE dynamic
+      pautFrame			is object OLE dynamic
+      arrProperty 		is array of 1 object Automation dynamic
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Defines the property
+      arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      arrProperty[1]>>Name 	= “SelectionOnly”
+      arrProperty[1]>>Value 	= True
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Backup by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:Save”, “”, 0, arrProperty)
+      
+      RESULT True
+     type : 458752
+   -
+     name : SaveAs
+     internal_properties : CAAAAAgAAAAwEtQeqWyIEGIXOKio6JLvoOANCLt1ffztDHrnL7HcgOzhXVpSlcdf+wlPSEUq6PLZRNQ923A184b8b3rN4Ai6JymFgVSBiE0pwgqCwH9ziUt9NCRX1t4uHW6XYJtiCyH+AAhuvh+W/pdu52NKhDQA2PNgA9RF2bMNVhdwi4jxWWGwV99XuqNRN/jo/KqbL6tNEcCdlQ==
+     procedure_id : 1219711647800978282
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] SaveAs ( [<psFullPath>])
+      // Save a document
+      // Parameters:
+      //	psFullPath: Full path of the file to save or empty string to open the file picker
+      // Return value:
+      // 	boolean:  True if the backup is effective, False otherwise
+      
+      Procedure VIRTUAL SaveAs(psFullPath=“”)
+      
+      // Local variables
+      mNoArgs 		is array of 0 variant
+      sFolderName 	is string
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      
+      IF psFullPath<>“” THEN
+      	sFolderName = psFullPath
+      ELSE
+      	sFolderName = fSelect(“”, “”, “Select a workbook...”, “OpenOffice workbook (*.ods)”+TAB+“*.ods”+CR+“Openoffice.org Workbook (*.sxc)”+TAB+“*.sxc”, “*.ods”, fselCreate)
+      	IF sFolderName=“” THEN RESULT False
+      END
+      
+      // Format the path of the file
+      sFolderName = “file:///”+Replace(sFolderName,“\”,“/”)
+      
+      // Save the document
+      :oDocument>>storeToURL(sFolderName, mNoArgs)
+      
+      RESULT True
+     type : 458752
+   -
+     name : CloseWorkbook
+     procedure_id : 1219711647801043818
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> =  ] CloseSpreadSheet ()
+      // Closes the active document
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean: True if the document was successfully closed, False otherwise
+      
+      Procedure VIRTUAL CloseWorkbook()
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      :oDocument>>Arrange()
+      
+      RESULT True
+     type : 458752
+   -
+     name : Print
+     internal_properties : CAAAAAgAAACky0n0GgJPSG0eaybg2Pfkg+aLticZ+EbLbnO8OXdo5gA69mY9YBOZnteQnxgneTstWsLmZIrt4KwlHGDAUvzAgz7TedYYsmK9Auof++CZ3z4sklHuENeQf9JqozxQ1I25vL412Z9juFkiUAz3oBuq0XPeZlOJVE+VqJK5/sryFkuT6LWVY53cPt0K1GoKp0A/ZJ0hl1oNc0dUlmuyvLCunpYp3g==
+     procedure_id : 1219711647801109354
+     type_code : 12
+     code : |1-
+      // Summary: <specify the action of the procedure>
+      // Syntax:
+      //[ <Result> = ] Print ( [<nNbCopies> [, <sPageList> is string]])
+      //
+      // Parameters:
+      //	nNbCopies (default value=1): <specify the role of nNbCopies>
+      //	sPageList (string - default value=""): <specify the role of nPageNumber>
+      // Return value:
+      // 	boolean:   True if the printout is effective, False otherwise
+      
+      Procedure VIRTUAL Print(nNbCopies=1,sPageList is string = “”) <redéfinition>
+      
+      // Configure the printout
+      PrintSettings is array of 1 object Automation dynamic
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Number of copies for the document
+      PrintSettings[1] = :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      PrintSettings[1]>>Name = “CopyCount”
+      PrintSettings[1]>>Value = nNbCopies
+      
+      // Printed pages
+      IF sPageList<>“” THEN
+      	ArrayAdd(PrintSettings)
+      	PrintSettings[2] =  :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	PrintSettings[2]>>Name = “Pages”
+      	PrintSettings[2]>>Value = sPageList
+      END
+      
+      // Effective printout
+      :oDocument>>print(PrintSettings)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Modified
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647801174890
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Modified ()
+      // Indicates whether the document was modified
+      // Parameters:
+      //	None
+      // Return value:
+      // 	Undefined type: True if the document was modified
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Modified()
+      
+      RESULT :oDocument>>isModified
+     type : 458752
+   -
+     name : Cell_Type
+     procedure_id : 1219711647801240426
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Cell_Type (<psCell>)
+      // Returns the type of a cell (empty, value, text, formula)
+      // Parameters:
+      //	psCell: Cell to interrogate
+      // Return value:
+      // 	Undefined type:                one of the following values:
+      // 0: EMPTY
+      // 1: VALUE
+      // 2: TEXT
+      // 3: FORMULA
+      Procedure VIRTUAL Cell_Type(psCell)
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // No action if it's not the address of a cell
+      IF MatchRegularExpression(psCell, “[a-zA-Z]+[0-9]+”) = False THEN
+      	RESULT “”
+      END
+      
+      SWITCH :oWorksheet>>getCellRangeByName(psCell)>>Type
+      	CASE 0 : RESULT “EMPTY”	
+      	CASE 1 : RESULT “VALUE”	
+      	CASE 2 : RESULT “TEXT”
+      	CASE 3 : RESULT “FORMULA”		
+      END
+      
+      RESULT “”
+     type : 458752
+   -
+     name : Column_Sort
+     internal_properties : CAAAAAgAAADsg7G/8npnfCeAP+yubmkW8dBB6+cZ2EbLbnO8OXdo5gA69mY9YBOZnteQnxgneTstWsLmZIrt4KwlHGDAUvzAgz7TedYYsmK9Auof++CZ3z4sEtFukFcQ/1LqI7zQVA05PD61WR/jONmi0Ix3IJsqUfNe5tMJ1M8VKBI5fkpylssTaDUV4x1cvl2KVOqqh2DcOSpSJnsaRgpjo0yd6ROT5l5hFg==
+     procedure_id : 1219711647801305962
+     type_code : 12
+     code : |1-
+      // Summary: Sorts a given column
+      // Syntax:
+      //[ <Result> = ] Column_Sort ([<sColumn> [, <sOrder>]])
+      //
+      // Parameters:
+      //	sColumn: Column to sort
+      //	sOrder (default value="ASC"): Direction of the sort
+      // Return value:
+      // 	boolean:  True if the sort is performed, False otherwise
+      //
+      Procedure VIRTUAL Column_Sort(sColumn=“”, sOrder=“ASC”)
+      
+      // Local variables
+      pautDispatcher 		is object OLE dynamic
+      pautFrame			is object OLE dynamic
+      arrmNoArgs 			is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      IF sColumn <> “” THEN
+      	:Cell_Select(sColumn)
+      END
+      
+      // Instance of Dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      SWITCH sOrder
+      	CASE “ASC”
+      		// Sort by the dispatcher
+      		pautDispatcher>>executeDispatch(pautFrame, “.uno:SortAscending”, “”, 0, arrmNoArgs)	
+      		
+      	CASE “DESC”
+      		// Sort by the dispatcher
+      		pautDispatcher>>executeDispatch(pautFrame, “.uno:SortDescending”, “”, 0, arrmNoArgs)		
+      		
+      	OTHER CASE
+      		dbgAssert(False,“The type of sort is unknown”)
+      		RESULT False
+      END
+      
+      // The sort of the column is effective
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Copy
+     internal_properties : CAAAAAgAAADq02O3J8a3EgJyzfJYXefdn2limObVuWYdYOiRmFWyOmEQvDSoQ3VFamcwZ4gl2g73nkJDF0giBWOL0gzPOe2xcvoPC2VEOZ+RgBWJpjf/M2Sn00CWX+P5ujpRylpJogG9/wNKOb9I7ipkAzO7iww9OKTPh85KDNZ2BFZX7SEP+yCzcDh04TPxD5qol65X86mgtUNofwlyGQye4/S0W2vkye0+TYJLwS8E90cdNhNR42I=
+     procedure_id : 1219711647801371498
+     type_code : 12
+     code : |1-
+      // Summary: Copies the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Copy ( [<sRange>])
+      //
+      // Parameters:
+      //	sRange: Cell to copy
+      // Return value:
+      // 	boolean:           True if the copy was performed
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Copy(sRange=“”)
+      
+      // Local variables
+      pautDispatcher 	is object OLE dynamic
+      pautFrame		is object OLE dynamic
+      arrmNoArgs 		is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Copy by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:Copy”, “”, 0, arrmNoArgs )
+      
+      // The copy of the text is effective
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Paste
+     internal_properties : CAAAAAgAAADq02O3J8a3EgJyzfJYXefdn2limObVuWYdYOiRmFWyOmEQvDSoQ3VFamcwZ4gl2g73nkJDF0giBWOL0gzPOe2xcvoPC2VEOZ+RgBWJpjf/M2Sn00CWX+P5ujpRylpJogG9/wNKOb9I7ipkAzO7iww9OKTPh85KDNZ2BFZX7SEP+yCzcDh04TPxD5qol65X86mgtUNofwlyGQye4/S0W2vkye0+TYJLwS8E90cdNhNR42I=
+     procedure_id : 1219711647801437034
+     type_code : 12
+     code : |1-
+      // Summary: Paste the content in a given cell
+      // Syntax:
+      //[ <Result> = ] Cell_Paste ( [<sRange>])
+      //
+      // Parameters:
+      //	sRange: Cell where the content must be copied
+      // Return value:
+      // 	boolean:      True if the paste operation was performed, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Paste(sRange=“”)
+      
+      // Local variables
+      pautDispatcher 	is object OLE dynamic
+      pautFrame		is object OLE dynamic
+      arrmNoArgs 		is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Paste by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:Paste”, “”, 0, arrmNoArgs )
+      
+      // The paste operation is effective
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Cut
+     internal_properties : CAAAAAgAAADq02O3J8a3EgJyzfJYXefdn2limObVuWYdYOiRmFWyOmEQvDSoQ3VFamcwZ4gl2g73nkJDF0giBWOL0gzPOe2xcvoPC2VEOZ+RgBWJpjf/M2Sn00CWX+P5ujpRylpJogG9/wNKOb9I7ipkAzO7iww9OKTPh85KDNZ2BFZX7SEP+yCzcDh04TPxD5qol65X86mgtUNofwlyGQye4/S0W2vkye0+TYJLwS8E90cdNhNR42I=
+     procedure_id : 1219711647801502570
+     type_code : 12
+     code : |1-
+      // Summary: Cuts the content of the cell
+      // Syntax:
+      //[ <Result> = ] Cell_Cut ( [<sRange>])
+      //
+      // Parameters:
+      //	sRange: Cell to cut
+      // Return value:
+      // 	boolean: True if the cut operation was performed, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Cut(sRange=“”)
+      
+      // Local variables
+      pautDispatcher 	is object OLE dynamic
+      pautFrame		is object OLE dynamic
+      arrmNoArgs 		is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Paste by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:Cut”, “”, 0, arrmNoArgs )
+      
+      // The cut operation is effective
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Merge
+     internal_properties : CAAAAAgAAABSvromypFeqZqbYLJjzlqnOZMAqrDhLzkXh0/Nh1j5QvtQzomeD6PAVtvjoO43TEKq7eda11ZH73Gzm+3wUTwkiGunNUoBZa/9iwZxkhBhNsG4vqTabxmD5HVrg9gvTGTsVwktVxIUK4wH12FFMvg+09FiixS/b8ooq1auNaGGznCm/CUoqxUGdE8M2lt5i9P+OxpKC1tp61bCibA0xpCchC6HWQEyaw/dN3jV8tNb3A==
+     procedure_id : 1219711647801568106
+     type_code : 12
+     code : |1-
+      // Summary: Merges the cells
+      // Syntax:
+      //[ <Result> = ] Cell_Merge ( [<sRange>])
+      //
+      // Parameters:
+      //	sRange: Range of cells to merge
+      // Return value:
+      // 	boolean: True if the merge is effective, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Cell_Merge(sRange=“”)
+      
+      // Local variables
+      pautDispatcher 	is object OLE dynamic
+      pautFrame		is object OLE dynamic
+      arrmNoArgs 		is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange<>“” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Paste by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:ToggleMergeCells”, “”, 0, arrmNoArgs )
+      
+      // The merge is effective
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_Occurrence
+     procedure_id : 1219711647801633642
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] Worksheet_Occurrence ()
+      // Number of worksheets found in the workbook
+      // Parameters:
+      //	None
+      // Return value:
+      // 	Undefined type:    Number of worksheets in the workbook
+      
+      Procedure VIRTUAL Worksheet_Occurrence()
+      
+      RESULT :oDocument>>Sheets>>count()
+     type : 458752
+   -
+     name : Cell_Format
+     internal_properties : CAAAAAgAAAAhn9Fm8x5Snbfn/mUfZxTwhQiiYgVe/hqZZ0K5HfnTV+01Cy/aFsyy8YEc5pEzlpWIAHl9jGn3W6DZAjH84/5QxRbx0mryosuWJIYG7/2GG/frMlc24pZSaArkNovA0gvWbjSusVpptR7ahWdCWwbna0jQol9wmZQCZIRHUy2dDQIcKubo/i804BgQXtyljiF/Yer7Py2emDy2BwnE2FVkhxiXpotI1kPZWaa/ksWC9Bwo
+     procedure_id : 1219711647801699178
+     type_code : 12
+     code : |1-
+      // Summary: Formats a cell
+      // Syntax:
+      //[ <Result> = ] Cell_Format (<sCellFormat> [, <sRange>])
+      //
+      // Parameters:
+      //	sCellFormat: Format of the cell (NUMBER, DATE, TIME, CURRENCY, PERCENTAGE)
+      //	sRange: Range of cells
+      // Return value:
+      // 	boolean:  True if the format was applied, False otherwise
+      //
+      Procedure VIRTUAL Cell_Format(sCellFormat, sRange=“”)
+      
+      // Local variables
+      pautDispatcher		is OLE dynamic
+      pautFrame			is OLE dynamic
+      arrProperty 		is array of 1 object Automation dynamic
+      nValue				is int
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange <> “” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // According to the requested format, stores the value of the "NumberFormatValue" property
+      SWITCH Upper(sCellFormat)
+      	// Number
+      	CASE “NUMBER” :		nValue = ::cst_Number_Format
+      	// Date (in MM/DD/YYYY format)
+      	CASE “DATE” :			nValue = ::cst_Date_Format 
+      	// Time
+      	CASE “TIME” : 		nValue = ::cst_Time_Format
+      	// Percentage
+      	CASE “PERCENTAGE” : nValue = ::cst_Percentage_Format
+      	// Currency
+      	CASE “CURRENCY” :	nValue = ::cst_Currency_Format
+      	// Scientific
+      	CASE “SCIENTIFIC” : 	nValue = ::cst_Scientific_Format
+      	// Fraction
+      	CASE “FRACTION” : 	nValue = ::cst_Fraction_Format
+      	// Text
+      	CASE “TEXT” : 		nValue = ::cst_Text_Format
+      	// Other, no action
+      	OTHER CASE :			dbgAssert(False,“The specified cell format is not supported”)
+      END
+      
+      // Defines the "Format" property
+      arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      arrProperty[1]>>Name 	= “NumberFormatValue”
+      arrProperty[1]>>Value 	= nValue
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Change of format by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:NumberFormatValue”, “”, 0, arrProperty)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_AddSelection
+     internal_properties : CAAAAAgAAABHQcUavKeVXTIucXGozK+/7bNNHxv9A3xHyGppjPJti6uWFJfLj/z/NTBLYASTNS5OabDo7/8LQ3rUWQQJCrQBayqrwCwgr+xcbwe6yyUJ7JxCDgyltyrWWKGd7JYDkCiD+we29btEaLLW9TeX2VaHkngbO9r20Jos4LLjYV8hjU67mAq+H61hv7bO2aQYFSemEFlC3TiqQl4qMJSHgr9KhrXTZHLpq3l1gzQ5vqwn6g9XqjbPI4FXED7od5R1alHC
+     procedure_id : 1219711647801764714
+     type_code : 12
+     code : |1-
+      // Summary: Adds a worksheet to the selection
+      // Syntax:
+      //[ <Result> = ] Worksheet_AddSelection (<nSubscript>)
+      //
+      // Parameters:
+      //	nSubscript: Subscript of the worksheet to add
+      // Return value:
+      // 	boolean:          True if the worksheet is added to the selection
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_AddSelection(nSubscript)
+      
+      // Local variables
+      pautDispatcher		is OLE dynamic
+      pautFrame			is OLE dynamic
+      arrProperty 		is array of 1 object Automation dynamic
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Adds the worksheet to the list of selected worksheets
+      ArrayAdd (:m_nArrSelectedWorksheets, nSubscript-1)
+      
+      // Defines the property for the selection of the worksheet
+      arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      arrProperty[1]>>Name 	= “Tables”
+      arrProperty[1]>>Value 	= :m_nArrSelectedWorksheets
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Change of format by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:SelectTables”, “”, 0, arrProperty)
+      
+      RESULT True
+     type : 458752
+   -
+     name : PrintPreview
+     internal_properties : CAAAAAgAAAB0qMz4NONse/jlAvzt3GRRK4V6TAI7euFljRnTjTJJvItQSgX0pRnMgBGdEujFgIAuQQd6TYwFVxPphZ9CX3zmfN8rCRRzZ9MXpUDTJG7NpBHIzhRkaWtfEWJG6EfwDYVJtPRyzIUDFr3Ajlr0c9F3BIKBFF0Oppk9SPE7MLbvl92L34LtjtChlSDLCxa+zJwraD1XKBpQ5n+8Ew5K8C4eJsgpJ1eE2Z3fCUo7GL1x9g==
+     procedure_id : 1219711647801830250
+     type_code : 12
+     code : |1-
+      // Summary: Starts the print preview
+      // Syntax:
+      //[ <Result> = ] PrintPreview ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:   True if the preview is displayed, False otherwise
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL PrintPreview()
+      
+      // Local variables
+      
+      // Local variables
+      pautDispatcher 		is object OLE dynamic
+      pautFrame			is object OLE dynamic
+      arrmNoArgs 			is array of 0 variant
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Instance of Dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      
+      // "Print preview" by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:PrintPreview”, “”, 0, arrmNoArgs)	
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : IsOpened
+     procedure_id : 1219711647801895786
+     type_code : 12
+     code : |1+
+      // Syntax:
+      //[ <Result> = ] IsOpened ()
+      // Used to check whether the workbook is still opened
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:     True if the workbook is opened
+      
+      Procedure VIRTUAL IsOpened()
+      
+      WHEN EXCEPTION IN
+      	// attempt to access the active worksheet of the workbook
+      	:oDocument>>CurrentController>>ActiveSheet
+      	RESULT True
+      DO
+      	delete :oDocument
+      	delete :oCellRange
+      	delete :oWorksheet
+      	RESULT False
+      END
+     type : 458752
+   -
+     name : GetActiveObject
+     internal_properties : CAAAAAgAAACrkXUtzQkVfw35ULtOce8kzET7Xzhv8HeSdiS18ZW1JL2nxQakICQ3Hgp0erC5YEfk71eCZtHFDVesdBTOUnnSU+LBsJz3nWDXa27U5iWO30U83SW2ZK/m9wN5JV8BZ3bWORNVWJexFSfRZT2JjVQDZ3RmR6FboulIQaEJjkQEAX1Y9hWVUvmMNC7J4xYPqsk/aZOkt4CejIBXgR+rjgxiGkH9ezYqzU3APERp1y/4T8gKpy3vi3RbgUv9hX4vmpa1Fd5T3CrRdilFASyH3nX5IdBOz+lVHkFadjVJ1y6Cq7qRkfEqHC/OkGqIEuTH2xJMqezQwXs6TaKiephw6/Uf+OVPzXD5kgcSKRKdghV4QjLqj9M5qwdHLkoGqCpaRIc=
+     procedure_id : 1219711647801961322
+     type_code : 12
+     code : |1-
+      // Syntax:
+      //[ <Result> = ] GetActiveObject ()
+      // Retrieves the active instance of OpenOffice
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:  True if an active instance was found
+      
+      Procedure GetActiveObject()
+      
+      // Service manager required by OpenOffice
+      :_StartService()
+      
+      WHEN EXCEPTION IN
+      	// Active object
+      	:oDocument = :oDesktop>>getCurrentComponent()
+      	
+      	// Active worksheet
+      	:oWorksheet = :oDocument>>CurrentController>>ActiveSheet
+      	
+      	// Selected cells
+      	:oCellRange = :oDocument>>CurrentSelection
+      	
+      	RESULT True
+      	
+      DO
+      	// No workbook object was found
+      	RESULT False
+      END
+     type : 458752
+   -
+     name : Worksheet_SelectBySubscript
+     internal_properties : CAAAAAgAAADesazPAG+R8uTXN/Vmsb65453i6LTIB28/1sb9mhSz6xrBYPS3doPPkDOhgNnro1dTu3x2OmDgtv1cGXDmPhIflr5GVJunKKlz4kLXMtCFkgS5MhjQnXG103X5awEwHjQDHzjqzrYK3dnRfsdST9BqklNJ2DuP8bCLe/ViCNDOqMUgwRzhYflyP3geY77OD7gsO6U1agtLKgBmFDAU7uXfld/M4GPHKtRGZdBj2FaRpvDs0p3Yoa0PIpgsot1TqQ==
+     procedure_id : 1219711647802026858
+     type_code : 12
+     code : |1+
+      // Summary: Selects a worksheet by its subscript
+      // Syntax:
+      //[ <Result> = ] Worksheet_SelectBySubscript (<nSubscript)
+      //
+      // Parameters:
+      //	nSubscript: Subscript of the worksheet to select
+      // Return value:
+      // 	boolean:        True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_SelectBySubscript(nSubscript)
+      
+      // Local variables
+      nRealSubscript			is int = nSubscript-1 // OOcal counts from 0
+      
+      pautDispatcher		is OLE dynamic
+      pautFrame			is OLE dynamic
+      arrProperty 		is array of 1 object Automation dynamic
+      arrValue			is array of 1 int
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Valid subscript?
+      IF nSubscript<0 OR nSubscript > :Worksheet_Occurrence() THEN
+      	RESULT False
+      END
+      
+      // Defines the subscript
+      arrValue[1] = nRealSubscript
+      
+      // Defines the "Format" property
+      arrProperty[1] 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      arrProperty[1]>>Name 	= “Tables”
+      arrProperty[1]>>Value 	= arrValue
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Change of format by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:SelectTables”, “”, 0, arrProperty)
+      
+      
+      // Clears the array of selected worksheets
+      ArrayDeleteAll(:m_nArrSelectedWorksheets)
+      // Adds the subscript of this worksheet
+      ArrayAdd(:m_nArrSelectedWorksheets,nRealSubscript)
+      
+      RESULT True 
+     type : 458752
+   -
+     name : _bDetection
+     internal_properties : CAAAAAgAAAC9oPkPH16rnSfIjz8O6w/x46fdWAPtdZ5GqfCAN8PlEeI9BwevakNgQkz4iaS1+lsQpwRrtTHrppDgsXSWpzBI0WNzvA/m0SKzx1lRN7WI0wRZXhdGrLmIKZt0FWJ51669ZviLul+9jwss2ZHyQ4yKGpct2Yt3C4G7YjI19k1LpmB8No7iVrg0asFfeA==
+     procedure_id : 1219711647802092394
+     type_code : 12
+     code : |1-
+      // Summary: Indicates whether OOCalc is found on the current computer
+      // Syntax:
+      //[ <Result> = ] _bDetection ()
+      //
+      // Parameters:
+      //	None
+      // Return value:
+      // 	boolean:        True if OOCalc is found on the computer, False otherwise
+      //// Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure GLOBAL _bDetection()
+      
+      // Local variables
+      sKey		is string
+      
+      
+      // Checks the presence of OpenOffice on the computer
+      sKey = RegistryExist(“HKEY_LOCAL_MACHINE\SOFTWARE\OpenOffice.org\UNO\InstallPath”)
+      
+      // If OpenOffice is not found on the computer, OOCalc is not found
+      RESULT (sKey <> “”)
+     type : 458752
+   -
+     name : Cell_Border
+     internal_properties : CAAAAAgAAAB7HA9PLN+AeiOFdW0Va8UeuurfXAQRnBkr3bBBtMc+WtHQY7YI3PB9uMHJ4b2KqgPu8GC9SrLi599KuU+NpJpXmDM1zNQcH+B1Em98Y8sLNZKt2iO1/3AUUpgW09q4goea0VPWqGM31cnfdTBNXq0Qk7E72RguBsV2WPsIDQ2WSHjAjMTQcMjDc4PY8iV0Zt/gLRi9B2W2C2IcTyblObCCxe4QAImy1rOWD/vtO+2lelBaXIHonwh96ILST4DOKw8y7ZE6M1egLUv+D/9f2rMnYXi1Am6Pai/I7NqVEmze823x9ZF6WJZHaqNBQVs8I3uApY/IVn7HcHdSS29ZVS/JSt4=
+     procedure_id : 1219711647802157930
+     type_code : 12
+     code : |1-
+      // Summary: Encloses a cell or a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Border ( [<sRange> [, <nBorder> [, <nThickness> [, <nColor>]]]])
+      //
+      // Parameters:
+      //	sRange: Range of cells to enclose
+      //	nBorder (default value=1): Border to draw (see the constants)
+      //	nThickness (default value=1): Style of the border
+      //	nColor (default value=0): Color of the border
+      // Return value:
+      // 	boolean:   True if the border was applied, False otherwise
+      //
+      Procedure VIRTUAL Cell_Border(sRange=“”, nBorder=::cnAllBorders, nThickness=1, nColor=0)
+      
+      // Local variables
+      pautDispatcher				is OLE dynamic
+      pautFrame					is OLE dynamic
+      pautLine					is OLE dynamic
+      pautProperty				is OLE dynamic
+      arrProperty				is array of 0 object Automation dynamic
+      arrArgs				 		is array of 0 variant
+      
+      
+      nLineThickness_In_Real	is int
+      nLineThickness_Out_Real	is int
+      nColor_Real				is int
+      nDistance_Real			is int
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange <> “” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // Defines the color and the thickness
+      nColor_Real 			= :_ColorConversion(nColor)
+      nLineThickness_In_Real 	= nThickness*30
+      nLineThickness_Out_Real 	= 0
+      
+      // Diagonals?
+      IF nBorder IN ( ::cnBorderDownwardDiagonal ,::cnBorderUpwardDiagonal) THEN 
+      	// Defines the line
+      	pautLine  					=:oServiceManager>>Bridge_GetStruct(“com.sun.star.table.BorderLine”)
+      	pautLine>>Color 			= nColor_Real 
+      	pautLine>>OuterLineWidth 	= nLineThickness_In_Real
+      	
+      	// TopBottom diagonal (TopLeft corner to BotomRight corner)
+      	IF nBorder = ::cnBorderDownwardDiagonal 	THEN :oCellRange>>DiagonalTLBR = pautLine
+      	// BottomTop diagonal (BottomLeft corner to TopRight corner)
+      	IF nBorder = ::cnBorderUpwardDiagonal 		THEN :oCellRange>>DiagonalBLTR = pautLine
+      	
+      	RESULT True
+      END
+      
+      // Defines the value of the properties
+      ArrayAdd(arrArgs,nColor_Real)
+      ArrayAdd(arrArgs,nLineThickness_Out_Real)
+      ArrayAdd(arrArgs,nLineThickness_In_Real)
+      ArrayAdd(arrArgs,nDistance_Real)
+      
+      // Defines the border properties
+      IF nBorder IN (::cnAllBorders,::cnLeftBorder) THEN
+      	
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.LeftBorder”
+      	pautProperty>>Value 	= arrArgs 
+      	ArrayAdd(arrProperty,pautProperty)
+      	
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.LeftDistance”
+      	pautProperty>>Value 	= arrArgs 
+      	ArrayAdd(arrProperty,pautProperty)
+      END
+      IF nBorder IN (::cnAllBorders,::cnRightBorder) THEN	
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.RightBorder”
+      	pautProperty>>Value 	= arrArgs
+      	ArrayAdd(arrProperty,pautProperty)
+      	
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.RightDistance”
+      	pautProperty>>Value 	= arrArgs
+      	ArrayAdd(arrProperty,pautProperty)
+      END
+      IF nBorder IN (::cnAllBorders,::cnTopBorder) THEN
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.TopBorder”
+      	pautProperty>>Value 	= arrArgs
+      	ArrayAdd(arrProperty,pautProperty)
+      	
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.TopDistance”
+      	pautProperty>>Value 	= arrArgs
+      	ArrayAdd(arrProperty,pautProperty)
+      END
+      IF nBorder IN (::cnAllBorders,::cnBottomBorder) THEN
+      	pautProperty 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.BottomBorder”
+      	pautProperty>>Value 	= arrArgs
+      	ArrayAdd(arrProperty,pautProperty)
+      	
+      	pautProperty	 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.beans.PropertyValue”)
+      	pautProperty>>Name 	= “BorderOuter.BottomDistance”
+      	pautProperty>>Value 	= arrArgs	
+      	ArrayAdd(arrProperty,pautProperty)
+      END
+      
+      // Instance of dispatcher
+      pautDispatcher 	= :oServiceManager>>createInstance(“com.sun.star.frame.DispatchHelper”)
+      // Frame
+      pautFrame 		= :oDocument>>getCurrentController()>>getFrame()
+      
+      // Change of format by the dispatcher
+      pautDispatcher>>executeDispatch(pautFrame, “.uno:BorderOuter”, “”, 0, arrProperty)
+      
+      RESULT True
+     type : 458752
+   -
+     name : Cell_Pattern
+     internal_properties : CAAAAAgAAACrM2rXmZcjuSaYVU5Is94E0H+nhyeJlH3/iX3hPA7EzbkQoGuMbJkiigdmjSMxYcZtLh0udA1QxylGB5y1Lc0xnAyNi4SEhGbh/hF9RDedV9lJbFJwkrPwDz/kjFPLiiQlFBP9L90YFcm5RaTXvKW0vjlBhGVbc4KHoSVTDp66aIwRGeexV2FeUKw3S54av41yq97n20mCupOlPAhzz4VkAVaQLdsnX20uJa1zMe1NUbMYOq4wj2+wsnhIE9rTf5q4uA==
+     procedure_id : 1219711647802223466
+     type_code : 12
+     code : |1-
+      // Summary: Used to modify the style of pattern for a cell or for a range of cells
+      // Syntax:
+      //[ <Result> = ] Cell_Pattern ([<sRange> [, <nPatternStyle> [, <nColor>]]])
+      //
+      // Parameters:
+      //	sRange: Range to modify
+      //	nPatternStyle (default value=13): Style of the pattern to apply (see the constants)
+      //	nColor: Color of the pattern
+      // Return value:
+      // 	boolean:  True if the patterns have been positioned, False otherwise
+      //
+      // CAUTION: applying a pattern to a cell is not available in OpenOfficeCalc (however, it is available for the graphic objects)
+      // These patterns are simulated by a rectangle that takes the dimensions of the range of cells and on which the pattern is applied.
+      //
+      Procedure VIRTUAL Cell_Pattern(sRange=“”, nPatternStyle=::cnBottomDiagonalPattern, nColor=RGB(60,60,60))
+      
+      // Local variables
+      pautPoint					is object OLE dynamic
+      pautSize	 				is object OLE dynamic
+      pautDrawPage				is object OLE dynamic
+      pautRectangle				is object OLE dynamic
+      pautHatch					is object OLE dynamic
+      
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Select the range of cells
+      IF sRange <> “” THEN
+      	:Cell_Select(sRange)
+      END
+      
+      // Insert a shape that will be used as support for the pattern (hatch, ...)
+      // Page for drawing
+      pautDrawPage 		= :oWorksheet>>DrawPage
+      
+      // Rectangle
+      pautRectangle 		= :oDocument>>createInstance(“com.sun.star.drawing.RectangleShape”) 
+      
+      // Start point: Top-Left corner of the cell
+      pautPoint 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.awt.Point”)
+      pautPoint>>X 		= :oCellRange>>Position>>X
+      pautPoint>>Y 		= :oCellRange>>Position>>Y
+      
+      // The dimensions depend on the current selection range
+      pautSize 			= :oServiceManager>>Bridge_GetStruct(“com.sun.star.awt.Size”)
+      pautSize>>Width 	= :oCellRange>>Size>>Width
+      pautSize>>Height 	= :oCellRange>>Size>>Height
+      
+      // Dimension
+      pautRectangle>>Size 			= pautSize
+      // Position
+      pautRectangle>>Position    		= pautPoint
+      
+      // The rectangle must become transparent
+      pautRectangle>>FillTransparence	= 50
+      pautRectangle>>FillColor		= RGB(125,125,125)
+      // Add the line to the drawing page
+      pautDrawPage>>add(pautRectangle) 
+      
+      // Defines the hatch
+      pautHatch 						= :oServiceManager>>Bridge_GetStruct(“com.sun.star.drawing.Hatch”)
+      pautRectangle>>FillStyle		= ::cnFillStyleHatch
+      pautHatch>>Style				= ::cnFillStyle_Simple
+      pautHatch>>Distance 			= 100
+      
+      // According to the requested pattern
+      SWITCH nPatternStyle
+      
+      	CASE ::cnHorizontalPattern
+      		pautHatch>>Angle 	= 0
+      		
+      	CASE ::cnVerticalPattern
+      		pautHatch>>Angle 	= 900
+      		
+      	CASE ::cnBottomDiagonalPattern
+      		pautHatch>>Angle 	= -450
+      		
+      	CASE ::cnTopDiagonalPattern
+      		pautHatch>>Angle 	= 450
+      		
+      	CASE ::cnGridPattern 			
+      		pautHatch>>Style	= ::cnFillStyle_Double
+      		pautHatch>>Angle 	= 0
+      		
+      	CASE ::cnCrissCrossPattern 		
+      		pautHatch>>Style	= ::cnFillStyle_Double
+      		pautHatch>>Angle 	= 450
+      END
+      // Stores the color for the patterns
+      pautHatch>>Color				= :_ColorConversion(nColor)
+      
+      // Stores the hatch
+      pautRectangle>>FillHatch		= pautHatch
+      
+      
+      RESULT True
+     type : 458752
+   -
+     name : Worksheet_DrawLine
+     internal_properties : CAAAAAgAAABfHadLp90X2ME4X9CA7SQSVGdADqNuJXQrtV7vu6ZTcejBBVDouUpKm3Z4PjNbv4yImBdCRfMjvD5m3dyBLdOr6XRXFeXlCbx088krHSwKevv02OR1pdGIQOjEaGJB9UHyKLTx231sxysdtuReeBwcwKZOlja0afz7F40hzhE8YLEXCnh+pNMOx5BA4gabWzBAEmqL+6RRiJZ6a4qjkJhykl+Gqe3nx0GXKlCEilXDAvDPZxM3JH1T5iIimNhC9bcyDqVx1juM2titssg8
+     procedure_id : 1219711647802289002
+     type_code : 12
+     code : |1-
+      // Summary: Draws an object in the worksheet specified in parameter
+      // Syntax:
+      //[ <Result> = ] Worksheet_DrawLine (<X1>, <Y1>, <X2>, <Y2> [, <nThickness> [, <nColor> [, <sWorksheetName>]]])
+      //
+      // Parameters:
+      //	X1: Source X coordinates
+      //	Y1: Source Y coordinates
+      //	X2: End X coordinates
+      //	Y2: End Y coordinates
+      //	nThickness (default value=1): Thickness of the line
+      //	nColor (default value=0): Color of the line
+      //	sWorksheetName: Name of the worksheet where the drawing will be performed
+      // Return value:
+      // 	boolean: True if the process is successful
+      // Automatic process of errors: RETURN FALSE
+      //
+      
+      Procedure VIRTUAL Worksheet_DrawLine(X1, Y1, X2, Y2, nThickness= 1 , nColor = 0, sLeafName=“”)
+      
+      // Local variables
+      pautALine				is object OLE dynamic
+      pautPointStart				is object OLE dynamic
+      pautSize					is object OLE dynamic
+      pautDrawPage				is object OLE dynamic
+      //arrPoint					is array of 2 dynamic OLE objects
+      
+      // Is there an active document?
+      IF :IsOpened()=False THEN RESULT False
+      
+      // Selects the worksheet where the object will be positioned
+      :Worksheet_Select(sLeafName)
+      
+      // Page for drawing
+      pautDrawPage = :oWorksheet>>DrawPage
+      
+      // Row
+      pautALine = :oDocument>>createInstance(“com.sun.star.drawing.LineShape”) 
+      
+      // Source point
+      pautPointStart 		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.awt.Point”)
+      pautPointStart>>X 	= X1*35
+      pautPointStart>>Y 	= Y1*30
+      
+      // Size
+      pautSize		= :oServiceManager>>Bridge_GetStruct(“com.sun.star.awt.Size”)
+      
+      // Defines the size according to the specified end position
+      pautSize>>width = X2*35-X1*35	// Width
+      pautSize>>height= Y2*30-Y1*30	// Height
+      
+      // Defines the initial position of the line
+      pautALine>>SetPosition(pautPointStart)
+      // Defines the size of the line "shape"
+      pautALine>>SetSize(pautSize)
+      
+      // Thickness
+      pautALine>>LineWidth    	= nThickness*30
+      // Color
+      pautALine>>LineColor		= :_ColorConversion(nColor)
+      
+      // Add the line to the drawing page
+      pautDrawPage>>add(pautALine)
+      
+      // The line was drawn
+      RESULT True
+     type : 458752
+   -
+     name : _ColorConversion
+     procedure_id : 1219711647802354538
+     type_code : 12
+     code : |1-
+      // Summary: Converting colors: RGB -> BGR (OOCalc supports the colors in BGR format)
+      // Syntax:
+      //[ <Result> = ] _ColorConversion (<nColor>)
+      //
+      // Parameters:
+      //	nColor: RGB color
+      // Return value:
+      // 	integer:  BGR color
+      //
+      Procedure PRIVATE _ColorConversion(nColor)
+      
+      // Local variables
+      sRGBColor		is string
+      sBGRColor		is string
+      nBGRColor		is int
+      
+      // Convert from RGB to BGR
+      sRGBColor = NumToString(nColor, “06X”)
+      sBGRColor = sRGBColor[[5 TO 6]]+sRGBColor[[3 TO 4]]+sRGBColor[[1 TO 2]]
+      nBGRColor = Val(sBGRColor,“x”)
+      
+      // Returns the converted color
+      RESULT nBGRColor
+     type : 458752
+  procedure_templates : []
+  property_templates : []
+ code_parameters :
+  internal_properties : CAAAAAgAAACVGQgYbalU7DKC3oH4ItDrjtcTHXXV/EuH8q0IbhyQlw==
+  original_name : CClasseur
+resources :
+ string_res :
+  identifier : 0x175d6f9c0c6ac653
+  internal_properties : CAAAAAgAAACm76HWfKGWp33VjXInA4cRlqArlgTTA862QGt72W2ld5Y=
+custom_note :
+ internal_properties : CAAAAAgAAABtB9HWVzrXO2+4NDRVK0vmzaNKrCKqH1DBX30lMmGZ
